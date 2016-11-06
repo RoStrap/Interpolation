@@ -61,25 +61,20 @@ These are the functions and properties of the TweenObjects returned with each Tw
 
 ## Easing Functions
 These are the available EasingFunctions:
+You need to specify the directon of EasingFunctions that aren't "Directionless":
 
-|Style Only|
-|-|
-|Linear|Spring|SoftSpring|RevBack|RidiculousWiggle|Smooth|Smoother|
-
-You need to specify the directon of these EasingFunctions:
-
-|Style|In|Out|InOut|OutIn
-|-|
-|**Quad**|InQuad|OutQuad|InOutQuad|OutInQuad
-|**Cubic**|InCubic|OutCubic|InOutCubic|OutInCubic
-|**Quart**|InQuart|OutQuart|InOutQuart|OutInQuart
-|**Quint**|InQuint|OutQuint|InOutQuint|OutInQuint
-|**Sine**|InSine|OutSine|InOutSine|OutInSine
-|**Expo**|InExpo|OutExpo|InOutExpo|OutInExpo
-|**Circ**|InCirc|OutCirc|InOutCirc|OutInCirc
-|**Elastic**|InElastic|OutElastic|InOutElastic|OutInElastic
-|**Back**|InBack|OutBack|InOutBack|OutInBack
-|**Bounce**|InBounce|OutBounce|InOutBounce|OutInBounce
+|   Directionless  |     In    |     Out    |     InOut    |     OutIn    |
+|:----------------:|:---------:|:----------:|:------------:|:------------:|
+|      Linear      |   InQuad  |   OutQuad  |   InOutQuad  |   OutInQuad  |
+|      Spring      |  InCubic  |  OutCubic  |  InOutCubic  |  OutInCubic  |
+|    SoftSpring    |  InQuart  |  OutQuart  |  InOutQuart  |  OutInQuart  |
+|      RevBack     |  InQuint  |  OutQuint  |  InOutQuint  |  OutInQuint  |
+| RidiculousWiggle |   InSine  |   OutSine  |   InOutSine  |   OutInSine  |
+|      Smooth      |   InExpo  |   OutExpo  |   InOutExpo  |   OutInExpo  |
+|     Smoother     |   InCirc  |   OutCirc  |   InOutCirc  |   OutInCirc  |
+|                  | InElastic | OutElastic | InOutElastic | OutInElastic |
+|                  |   InBack  |   OutBack  |   InOutBack  |   OutInBack  |
+|                  |  InBounce |  OutBounce |  InOutBounce |  OutInBounce |
 
 If you really need to, you can access the EasingFunctions for use with other modules through the following:
 ```lua

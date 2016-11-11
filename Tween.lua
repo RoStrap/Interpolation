@@ -395,6 +395,7 @@ local Easing do
 end
 
 local typeof = typeof
+local setmetatable = setmetatable
 if not typeof then -- @author Tomarty
 	local type = type
 	local pcall = pcall
@@ -405,8 +406,6 @@ if not typeof then -- @author Tomarty
 			local rtype = sub(result, 48, -2)
 			if rtype == "Object" then
 				rtype = "Instance"
-			elseif rtype == "EnumItem" then
-				rtype = "Enum"
 			end
 			self[result] = rtype
 			return rtype
@@ -589,7 +588,6 @@ local RunService = game:GetService("RunService")
 local Heartbeat = RunService.Heartbeat
 local Connect = Heartbeat.Connect
 local Wait = Heartbeat.Wait
-local setmetatable = setmetatable
 
 local Disconnect do
 	local Connection = Connect(Heartbeat, function() end)
@@ -612,6 +610,7 @@ local function StopTween(self, Finished)
 	if Callback then
 		Callback(Finished and Completed or Canceled)
 	end
+	return self
 end
 
 local function ResumeTween(self)
@@ -626,15 +625,21 @@ local function ResumeTween(self)
 	end
 end
 
+local function RestartTween(self)
+	self:ElapsedTimeReset():Resume()
+end
+
 local function WaitTween(self)
 	repeat until not self.Running or not Wait(Heartbeat)
+	return self
 end
 
 local TweenObject = {
 	Running = false;
+	Wait = WaitTween;
 	Stop = StopTween;
 	Resume = ResumeTween;
-	Wait = WaitTween;
+	Restart = RestartTween;
 }
 TweenObject.__index = TweenObject
 
@@ -647,15 +652,15 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	-- @param Number time
 	-- @param String EasingName
 
-	if typeof(EasingDirection) == "Enum" then
+	if typeof(EasingDirection) == "EnumItem" then
 		EasingDirection = EasingDirection.Name
 	end
 
-	if typeof(EasingStyle) == "Enum" then
+	if typeof(EasingStyle) == "EnumItem" then
 		EasingStyle = EasingStyle.Name
 	end
 
-	local EasingFunction = Easing[EasingDirection .. EasingStyle] or Easing[EasingStyle]
+	local EasingFunction = Easing[EasingDirection and EasingDirection .. EasingStyle or EasingStyle] or Easing[EasingStyle]
 	local StartValue = Object[Property]
 	local AlphaFunction = Lerps[PropertyType or typeof(EndValue)]
 
@@ -675,6 +680,11 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	else
 		ObjectTable = {}
 		Tweens[Object] = ObjectTable
+	end
+
+	function self:ElapsedTimeReset()
+		ElapsedTime = 0
+		return self
 	end
 
 	function self.Interpolate(step)
@@ -697,6 +707,11 @@ function Tween.new(Duration, Function, Callback)
 	local EasingFunction = Easing[Function]
 	local ElapsedTime = 0
 	local self = setmetatable({}, TweenObject)
+
+	function self:ElapsedTimeReset()
+		ElapsedTime = 0
+		return self
+	end
 
 	function self.Interpolate(step)
 		if Duration > ElapsedTime then

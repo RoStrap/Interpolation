@@ -81,3 +81,12 @@ If you really need to, you can access the EasingFunctions for use with other mod
 local Tween = require("Tween")
 local Easing = Tween.EasingFunctions
 ```
+
+#Bezier Module
+Used to create Bezier functions.
+##API
+```lua
+local EasingFunc = Bezier.new(0.17, 0.67, 0.83, 0.67)
+```
+Test and generate Bezier curves here at [cubic-bezier.com/](http://cubic-bezier.com/)
+Credit: Math borrowed from [here](https://gist.github.com/gre/1926947#file-keyspline-js)

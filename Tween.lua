@@ -652,29 +652,37 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	-- @param Number time
 	-- @param String EasingName
 
-	if typeof(EasingDirection) == "EnumItem" then
-		EasingDirection = EasingDirection.Name
-	end
+	Duration = Duration or 1
+
+	local EasingFunction = typeof(EasingDirection)
 
 	if typeof(EasingStyle) == "EnumItem" then
 		EasingStyle = EasingStyle.Name
 	end
 
-	local EasingFunction = Easing[EasingDirection and EasingDirection .. EasingStyle or EasingStyle] or Easing[EasingStyle]
+	if EasingFunction == "EnumItem" then
+		EasingDirection = EasingDirection.Name
+	end
+
+	if EasingFunction == "function" then
+		EasingFunction = EasingDirection
+	else
+		EasingFunction = Easing[EasingDirection and EasingDirection .. EasingStyle or EasingStyle] or Easing[EasingStyle]
+	end
+
 	local StartValue = Object[Property]
 	local AlphaFunction = Lerps[PropertyType or typeof(EndValue)]
-
 	local ElapsedTime, Connection = 0
 	local self = setmetatable({Callback = Callback; Property = Property}, TweenObject)
-
 	local ObjectTable = Tweens[Object]
+
 	if ObjectTable then
 		local OpenTween = ObjectTable[Property]
 		if OpenTween then
 			if Override then
 				StopTween(OpenTween)
 			else
-				return StopTween(self, warn("Could not Tween", tostring(Object) .. "." .. Property, "to", EndValue))
+				return StopTween(self) -- warn("Could not Tween", tostring(Object) .. "." .. Property, "to", EndValue))
 			end
 		end
 	else
@@ -703,8 +711,13 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	return ResumeTween(self)
 end
 
-function Tween.new(Duration, Function, Callback)
-	local EasingFunction = Easing[Function]
+function Tween.new(Duration, EasingFunction, Callback)
+	Duration = Duration or 1
+
+	if type(EasingFunction) == "string" then
+		EasingFunction = Easing[EasingFunction]
+	end
+
 	local ElapsedTime = 0
 	local self = setmetatable({}, TweenObject)
 

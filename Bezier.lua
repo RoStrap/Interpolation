@@ -10,7 +10,8 @@ function Bezier.new(n, r, a, w)
 	local l, z = 3*a, 3*n
 	w, r = 3*w, 3*r
 	a, n = 6*(a - 2*n), 1 - w + r
-	local m, b, o, q = 1 - l + z, l - 2*z, 3*(1 - l + z), w - 2*r
+	local m, b, q = 1 - l + z, l - 2*z, w - 2*r
+	local o = 3*m
 
 	return function(x)
 		-- @param number x [0, 1]

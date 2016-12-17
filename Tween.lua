@@ -609,13 +609,14 @@ Connect(Heartbeat, function(Step)
 		CurrentTween:Interpolate(EndTime > ElapsedTime and ElapsedTime or EndTime)
 	end
 end)
+local remove = table.remove
 
 local function StopTween(self)
 	if self.Running then
 		for a = 1, NumTweens do
 			local OpenTween = Tweens[a]
 			if OpenTween == self then
-				Tweens[a] = nil
+				remove(Tweens, a)
 				NumTweens = NumTweens - 1
 			end
 		end

@@ -597,42 +597,36 @@ end
 
 local Completed, Canceled = Enum.TweenStatus.Completed, Enum.TweenStatus.Canceled
 
-local NumTweens = 0
-local Tweens = {}
-local ElapsedTime = 0
-
-Connect(Heartbeat, function(Step)
-	ElapsedTime = ElapsedTime + Step
-	for a = 1, NumTweens do
-		local CurrentTween = Tweens[a]
-		local EndTime = CurrentTween.EndTime
-		CurrentTween:Interpolate(EndTime > ElapsedTime and ElapsedTime or EndTime)
-	end
-end)
-
-local function StopTween(self)
+local function StopTween(self, Finished)
 	if self.Running then
-		for a = 1, NumTweens do
-			local OpenTween = Tweens[a]
-			if OpenTween == self then
-				Tweens[a] = nil
-				NumTweens = NumTweens - 1
-			end
-		end
+		Disconnect(self.Connection)
 		self.Running = false
-		self.Callback(Canceled)
+		local ObjectTable = self.ObjectTable
+		if ObjectTable then
+			ObjectTable[self.Property] = nil -- This is for override checks
+		end
 	end
-
+	local Callback = self.Callback
+	if Callback then
+		Callback(Finished and Completed or Canceled)
+	end
 	return self
 end
 
 local function ResumeTween(self)
 	if not self.Running then
+		self.Connection = Connect(Heartbeat, self.Interpolator)
 		self.Running = true
-		NumTweens = NumTweens + 1
-		Tweens[NumTweens] = self
+		local ObjectTable = self.ObjectTable
+		if ObjectTable then
+			ObjectTable[self.Property] = self -- This is for override checks
+		end
 		return self
 	end
+end
+
+local function RestartTween(self)
+	return ResumeTween(self:ResetElapsedTime())
 end
 
 local function WaitTween(self)
@@ -641,17 +635,16 @@ local function WaitTween(self)
 end
 
 local TweenObject = {
-	Running = true;
-	Object = false;
-	Property = false;
+	Running = false;
 	Wait = WaitTween;
 	Stop = StopTween;
 	Resume = ResumeTween;
+	Restart = RestartTween;
 }
 TweenObject.__index = TweenObject
 
-local Tween = {EasingFunctions = Easing}
-local function Empty() end
+local Tweens = {EasingFunctions = Easing}
+local Tween = {OpenTweens = Tweens}
 function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, Duration, Override, Callback, PropertyType)
 	-- @param Object object OR Table object OR Void Function receiver(String propertyName, Variant value),
 	-- @param String Property,
@@ -660,9 +653,6 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	-- @param String EasingName
 
 	Duration = Duration or 1
-	Callback = Callback or Empty
-	local StartTime = ElapsedTime
-	local EndTime = StartTime + Duration
 
 	local EasingFunction = typeof(EasingDirection)
 
@@ -681,35 +671,44 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	end
 
 	local StartValue = Object[Property]
-	local AlphaFunction = Lerps[PropertyType or typeof(EndValue)]
-	local self = setmetatable({Object = Object; Property = Property; Callback = Callback; EndTime = EndTime}, TweenObject)
+	local Lerp = Lerps[PropertyType or typeof(EndValue)]
+	local ElapsedTime, Connection = 0
+	local self = setmetatable({Callback = Callback; Property = Property}, TweenObject)
+	local ObjectTable = Tweens[Object]
 
-	for a = 1, NumTweens do
-		local OpenTween = Tweens[a]
-		if OpenTween.Object == Object and OpenTween.Property == Property then
+	if ObjectTable then
+		local OpenTween = ObjectTable[Property]
+		if OpenTween then
 			if Override then
 				StopTween(OpenTween)
 			else
 				return StopTween(self) -- warn("Could not Tween", tostring(Object) .. "." .. Property, "to", EndValue))
 			end
 		end
+	else
+		ObjectTable = {}
+		Tweens[Object] = ObjectTable
 	end
 
-	function self:Interpolate(ElapsedTime)
-		if ElapsedTime == EndTime then
-			Object[Property] = EndValue
-			self.Running = false
-			Callback(Completed)
+	function self:ResetElapsedTime()
+		ElapsedTime = 0
+		return self
+	end
+
+	function self.Interpolator(Step)
+		if Duration > ElapsedTime then
+			ElapsedTime = ElapsedTime + Step
+			Object[Property] = Lerp(StartValue, EndValue, EasingFunction(ElapsedTime, 0, 1, Duration))
 		else
-			Object[Property] = AlphaFunction(StartValue, EndValue, EasingFunction(ElapsedTime - StartTime, 0, 1, Duration))
+			StopTween(self, true)
+			Object[Property] = EndValue
 		end
 	end
 
-	self.Running = true
-	NumTweens = NumTweens + 1
-	Tweens[NumTweens] = self
+	ObjectTable[Property] = self
+	self.ObjectTable = ObjectTable
 
-	return self
+	return ResumeTween(self)
 end
 
 function Tween.new(Duration, EasingFunction, Callback)
@@ -719,23 +718,25 @@ function Tween.new(Duration, EasingFunction, Callback)
 		EasingFunction = Easing[EasingFunction]
 	end
 
-	local StartTime = ElapsedTime
-	local EndTime = StartTime + Duration
-	local self = setmetatable({EndTime = EndTime}, TweenObject)
+	local ElapsedTime = 0
+	local self = setmetatable({}, TweenObject)
 
-	function self:Interpolate(ElapsedTime)
-		if ElapsedTime == EndTime then
-			self.Running = false
-			Callback(1)
+	function self:ResetElapsedTime()
+		ElapsedTime = 0
+		return self
+	end
+
+	function self.Interpolator(Step)
+		if Duration > ElapsedTime then
+			ElapsedTime = ElapsedTime + Step
+			Callback(EasingFunction(ElapsedTime, 0, 1, Duration))
 		else
-			Callback(EasingFunction(ElapsedTime - StartTime, 0, 1, Duration))
+			Callback(1)
+			StopTween(self)
 		end
 	end
 
-	NumTweens = NumTweens + 1
-	Tweens[NumTweens] = self
-
-	return self
+	return ResumeTween(self)
 end
 
 return setmetatable(Tween, Tween)

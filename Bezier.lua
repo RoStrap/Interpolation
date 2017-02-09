@@ -17,7 +17,7 @@ function Bezier.new(n, r, a, w)
 		-- @param number x [0, 1]
 		local d = x
 		for _ = 1, 4 do
-			y = o*d*d + a*d + z
+			y = d*(a + o*d) + z
 			if y == 0 then break end
 			d = d - (((m*d + b)*d + z)*d - x) / y
 		end

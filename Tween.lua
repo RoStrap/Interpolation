@@ -617,8 +617,12 @@ local TweenObject = {
 }
 TweenObject.__index = TweenObject
 
-local Tweens = {EasingFunctions = Easing}
-local Tween = {OpenTweens = Tweens}
+local Tweens = {}
+local Tween = {
+	OpenTweens = Tweens;
+	EasingFunctions = Easing;
+}
+
 function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, Duration, Override, Callback, PropertyType)
 	-- @param Object object OR Table object OR Void Function receiver(String propertyName, Variant value),
 	-- @param String Property,

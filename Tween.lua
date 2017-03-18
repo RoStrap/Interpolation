@@ -36,62 +36,62 @@ local Easing do
 	local sin, cos, pi, abs, asin = math.sin, math.cos, math.pi, math.abs, math.asin
 	local _2pi = 2 * pi
 	local _halfpi = 0.5 * pi
-	local softspringpi = -3.2*pi
-	local springpi = 2*softspringpi
+	local SoftSpringpi = -3.2*pi
+	local Springpi = 2*SoftSpringpi
 
-	local function linear(t, b, c, d)
+	local function Linear(t, b, c, d)
 		return c * t / d + b
 	end
 
-	local function smooth(t, b, c, d)
+	local function Smooth(t, b, c, d)
 		t = t / d
 		return c * t * t * (3 - 2*t) + b
 	end
 
-	local function smoother(t, b, c, d)
+	local function Smoother(t, b, c, d)
 		t = t / d
 		return c*t*t*t * (t * (6*t - 15) + 10) + b
 	end
 
 	-- Arceusinator's Easing Functions
-	local function revBack(t, b, c, d)
+	local function RevBack(t, b, c, d)
 		t = 1 - t / d
 		return c*(1 - (sin(t*_halfpi) + (sin(t*pi) * (cos(t*pi) + 1)*0.5))) + b
 	end
 
-	local function ridiculousWiggle(t, b, c, d)
+	local function RidiculousWiggle(t, b, c, d)
 		t = t / d
 		return c*sin(sin(t*pi)*_halfpi) + b
 	end
 
 	-- YellowTide's Easing Functions
-	local function spring(t, b, c, d)
+	local function Spring(t, b, c, d)
 		t = t / d
-		return (1 + (-2.72^(-6.9*t) * cos(springpi*t))) * c + b
+		return (1 + (-2.72^(-6.9*t) * cos(Springpi*t))) * c + b
 	end
 
-	local function softSpring(t, b, c, d)
+	local function SoftSpring(t, b, c, d)
 		t = t / d
-		return (1 + (-2.72^(-7.5*t) * cos(softspringpi*t))) * c + b
+		return (1 + (-2.72^(-7.5*t) * cos(SoftSpringpi*t))) * c + b
 	end
 	-- End of YellowTide's functions
 
-	local function inQuad(t, b, c, d)
+	local function InQuad(t, b, c, d)
 		t = t / d
 		return c * t * t + b
 	end
 
-	local function outQuad(t, b, c, d)
+	local function OutQuad(t, b, c, d)
 		t = t / d
 		return -c * t * (t - 2) + b
 	end
 
-	local function inOutQuad(t, b, c, d)
+	local function InOutQuad(t, b, c, d)
 		t = t / d * 2
 		return t < 1 and c * 0.5 * t * t + b or -c * 0.5 * ((t - 1) * (t - 3) - 1) + b
 	end
 
-	local function outInQuad(t, b, c, d)
+	local function OutInQuad(t, b, c, d)
 		if t < d * 0.5 then
 			t = 2 * t / d
 			return -0.5 * c * t * (t - 2) + b
@@ -101,17 +101,17 @@ local Easing do
 		end
 	end
 
-	local function inCubic(t, b, c, d)
+	local function InCubic(t, b, c, d)
 		t = t / d
 		return c * t * t * t + b
 	end
 
-	local function outCubic(t, b, c, d)
+	local function OutCubic(t, b, c, d)
 		t = t / d - 1
 		return c * (t * t * t + 1) + b
 	end
 
-	local function inOutCubic(t, b, c, d)
+	local function InOutCubic(t, b, c, d)
 		t = t / d * 2
 		if t < 1 then
 			return c * 0.5 * t * t * t + b
@@ -121,7 +121,7 @@ local Easing do
 		end
 	end
 
-	local function outInCubic(t, b, c, d)
+	local function OutInCubic(t, b, c, d)
 		if t < d * 0.5 then
 			t = t * 2 / d - 1
 			return c * 0.5 * (t * t * t + 1) + b
@@ -131,17 +131,17 @@ local Easing do
 		end
 	end
 
-	local function inQuart(t, b, c, d)
+	local function InQuart(t, b, c, d)
 		t = t / d
 		return c * t * t * t * t + b
 	end
 
-	local function outQuart(t, b, c, d)
+	local function OutQuart(t, b, c, d)
 		t = t / d - 1
 		return -c * (t * t * t * t - 1) + b
 	end
 
-	local function inOutQuart(t, b, c, d)
+	local function InOutQuart(t, b, c, d)
 		t = t / d * 2
 		if t < 1 then
 			return c * 0.5 * t * t * t * t + b
@@ -151,7 +151,7 @@ local Easing do
 		end
 	end
 
-	local function outInQuart(t, b, c, d)
+	local function OutInQuart(t, b, c, d)
 		if t < d * 0.5 then
 			t, c = t * 2 / d - 1, c * 0.5
 			return -c * (t * t * t * t - 1) + b
@@ -161,17 +161,17 @@ local Easing do
 		end
 	end
 
-	local function inQuint(t, b, c, d)
+	local function InQuint(t, b, c, d)
 		t = t / d
 		return c * t * t * t * t * t + b
 	end
 
-	local function outQuint(t, b, c, d)
+	local function OutQuint(t, b, c, d)
 		t = t / d - 1
 		return c * (t * t * t * t * t + 1) + b
 	end
 
-	local function inOutQuint(t, b, c, d)
+	local function InOutQuint(t, b, c, d)
 		t = t / d * 2
 		if t < 1 then
 			return c * 0.5 * t * t * t * t * t + b
@@ -181,7 +181,7 @@ local Easing do
 		end
 	end
 
-	local function outInQuint(t, b, c, d)
+	local function OutInQuint(t, b, c, d)
 		if t < d * 0.5 then
 			t = t * 2 / d - 1
 			return c * 0.5 * (t * t * t * t * t + 1) + b
@@ -191,52 +191,52 @@ local Easing do
 		end
 	end
 
-	local function inSine(t, b, c, d)
+	local function InSine(t, b, c, d)
 		return -c * cos(t / d * _halfpi) + c + b
 	end
 
-	local function outSine(t, b, c, d)
+	local function OutSine(t, b, c, d)
 		return c * sin(t / d * _halfpi) + b
 	end
 
-	local function inOutSine(t, b, c, d)
+	local function InOutSine(t, b, c, d)
 		return -c * 0.5 * (cos(pi * t / d) - 1) + b
 	end
 
-	local function outInSine(t, b, c, d)
+	local function OutInSine(t, b, c, d)
 		c = c * 0.5
 		return t < d * 0.5 and c * sin(t * 2 / d * _halfpi) + b or -c * cos(((t * 2) - d) / d * _halfpi) + 2 * c + b
 	end
 
-	local function inExpo(t, b, c, d)
+	local function InExpo(t, b, c, d)
 		return t == 0 and b or c * 2 ^ (10 * (t / d - 1)) + b - c * 0.001
 	end
 
-	local function outExpo(t, b, c, d)
+	local function OutExpo(t, b, c, d)
 		return t == d and b + c or c * 1.001 * (1 - 2 ^ (-10 * t / d)) + b
 	end
 
-	local function inOutExpo(t, b, c, d)
+	local function InOutExpo(t, b, c, d)
 		t = t / d * 2
 		return t == 0 and b or t == 2 and b + c or t < 1 and c * 0.5 * 2 ^ (10 * (t - 1)) + b - c * 0.0005 or c * 0.5 * 1.0005 * (2 - 2 ^ (-10 * (t - 1))) + b
 	end
 
-	local function outInExpo(t, b, c, d)
+	local function OutInExpo(t, b, c, d)
 		c = c * 0.5
 		return t < d * 0.5 and (t * 2 == d and b + c or c * 1.001 * (1 - 2 ^ (-20 * t / d)) + b) or t * 2 - d == 0 and b + c or c * 2 ^ (10 * ((t * 2 - d) / d - 1)) + b + c - c * 0.001
 	end
 
-	local function inCirc(t, b, c, d)
+	local function InCirc(t, b, c, d)
 		t = t / d
 		return -c * ((1 - t * t) ^ 0.5 - 1) + b
 	end
 
-	local function outCirc(t, b, c, d)
+	local function OutCirc(t, b, c, d)
 		t = t / d - 1
 		return c * (1 - t * t) ^ 0.5 + b
 	end
 
-	local function inOutCirc(t, b, c, d)
+	local function InOutCirc(t, b, c, d)
 		t = t / d * 2
 		if t < 1 then
 			return -c * 0.5 * ((1 - t * t) ^ 0.5 - 1) + b
@@ -246,7 +246,7 @@ local Easing do
 		end
 	end
 
-	local function outInCirc(t, b, c, d)
+	local function OutInCirc(t, b, c, d)
 		c = c * 0.5
 		if t < d * 0.5 then
 			t = t * 2 / d - 1
@@ -257,19 +257,19 @@ local Easing do
 		end
 	end
 
-	local function inElastic(t, b, c, d, a, p)
+	local function InElastic(t, b, c, d, a, p)
 		t = t / d - 1
 		p = p or d * 0.3
 		return t == -1 and b or t == 0 and b + c or not a or a < abs(c) and -(c * 2 ^ (10 * t) * sin((t * d - p * .25) * _2pi / p)) + b or -(a * 2 ^ (10 * t) * sin((t * d - p / _2pi * asin(c/a)) * _2pi / p)) + b
 	end
 
-	local function outElastic(t, b, c, d, a, p)
+	local function OutElastic(t, b, c, d, a, p)
 		t = t / d
 		p = p or d * 0.3
 		return t == 0 and b or t == 1 and b + c or not a or a < abs(c) and c * 2 ^ (-10 * t) * sin((t * d - p * .25) * _2pi / p) + c + b or a * 2 ^ (-10 * t) * sin((t * d - p / _2pi * asin(c / a)) * _2pi / p) + c + b
 	end
 
-	local function inOutElastic(t, b, c, d, a, p)
+	local function InOutElastic(t, b, c, d, a, p)
 		if t == 0 then
 			return b
 		end
@@ -299,27 +299,27 @@ local Easing do
 		end
 	end
 
-	local function outInElastic(t, b, c, d, a, p)
+	local function OutInElastic(t, b, c, d, a, p)
 		if t < d * 0.5 then
-			return outElastic(t * 2, b, c * 0.5, d, a, p)
+			return OutElastic(t * 2, b, c * 0.5, d, a, p)
 		else
-			return inElastic(t * 2 - d, b + c * 0.5, c * 0.5, d, a, p)
+			return InElastic(t * 2 - d, b + c * 0.5, c * 0.5, d, a, p)
 		end
 	end
 
-	local function inBack(t, b, c, d, s)
+	local function InBack(t, b, c, d, s)
 		s = s or 1.70158
 		t = t / d
 		return c * t * t * ((s + 1) * t - s) + b
 	end
 
-	local function outBack(t, b, c, d, s)
+	local function OutBack(t, b, c, d, s)
 		s = s or 1.70158
 		t = t / d - 1
 		return c * (t * t * ((s + 1) * t + s) + 1) + b
 	end
 
-	local function inOutBack(t, b, c, d, s)
+	local function InOutBack(t, b, c, d, s)
 		s = (s or 1.70158) * 1.525
 		t = t / d * 2
 		if t < 1 then
@@ -330,7 +330,7 @@ local Easing do
 		end
 	end
 
-	local function outInBack(t, b, c, d, s)
+	local function OutInBack(t, b, c, d, s)
 		c = c * 0.5
 		s = s or 1.70158
 		if t < d * 0.5 then
@@ -342,7 +342,7 @@ local Easing do
 		end
 	end
 
-	local function outBounce(t, b, c, d)
+	local function OutBounce(t, b, c, d)
 		t = t / d
 		if t < 1 / 2.75 then
 			return c * (7.5625 * t * t) + b
@@ -358,70 +358,44 @@ local Easing do
 		end
 	end
 
-	local function inBounce(t, b, c, d)
-		return c - outBounce(d - t, 0, c, d) + b
+	local function InBounce(t, b, c, d)
+		return c - OutBounce(d - t, 0, c, d) + b
 	end
 
-	local function inOutBounce(t, b, c, d)
+	local function InOutBounce(t, b, c, d)
 		if t < d * 0.5 then
-			return inBounce(t * 2, 0, c, d) * 0.5 + b
+			return InBounce(t * 2, 0, c, d) * 0.5 + b
 		else
-			return outBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b
+			return OutBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b
 		end
 	end
 
-	local function outInBounce(t, b, c, d)
+	local function OutInBounce(t, b, c, d)
 		if t < d * 0.5 then
-			return outBounce(t * 2, b, c * 0.5, d)
+			return OutBounce(t * 2, b, c * 0.5, d)
 		else
-			return inBounce(t * 2 - d, b + c * 0.5, c * 0.5, d)
+			return InBounce(t * 2 - d, b + c * 0.5, c * 0.5, d)
 		end
 	end
 
 	Easing = {
-		Linear = linear; Spring = spring; SoftSpring = softSpring; RevBack = revBack; RidiculousWiggle = ridiculousWiggle; Smooth = smooth; Smoother = smoother;
+		Linear = Linear; Spring = Spring; SoftSpring = SoftSpring; RevBack = RevBack; RidiculousWiggle = RidiculousWiggle; Smooth = Smooth; Smoother = Smoother;
 
-		InQuad    = inQuad;    OutQuad    = outQuad;    InOutQuad    = inOutQuad;    OutInQuad    = outInQuad;
-		InCubic   = inCubic;   OutCubic   = outCubic;   InOutCubic   = inOutCubic;   OutInCubic   = outInCubic;
-		InQuart   = inQuart;   OutQuart   = outQuart;   InOutQuart   = inOutQuart;   OutInQuart   = outInQuart;
-		InQuint   = inQuint;   OutQuint   = outQuint;   InOutQuint   = inOutQuint;   OutInQuint   = outInQuint;
-		InSine    = inSine;    OutSine    = outSine;    InOutSine    = inOutSine;    OutInSine    = outInSine;
-		InExpo    = inExpo;    OutExpo    = outExpo;    InOutExpo    = inOutExpo;    OutInExpo    = outInExpo;
-		InCirc    = inCirc;    OutCirc    = outCirc;    InOutCirc    = inOutCirc;    OutInCirc    = outInCirc;
-		InElastic = inElastic; OutElastic = outElastic; InOutElastic = inOutElastic; OutInElastic = outInElastic;
-		InBack    = inBack;    OutBack    = outBack;    InOutBack    = inOutBack;    OutInBack    = outInBack;
-		InBounce  = inBounce;  OutBounce  = outBounce;  InOutBounce  = inOutBounce;  OutInBounce  = outInBounce;
+		InQuad    = InQuad;    OutQuad    = OutQuad;    InOutQuad    = InOutQuad;    OutInQuad    = OutInQuad;
+		InCubic   = InCubic;   OutCubic   = OutCubic;   InOutCubic   = InOutCubic;   OutInCubic   = OutInCubic;
+		InQuart   = InQuart;   OutQuart   = OutQuart;   InOutQuart   = InOutQuart;   OutInQuart   = OutInQuart;
+		InQuint   = InQuint;   OutQuint   = OutQuint;   InOutQuint   = InOutQuint;   OutInQuint   = OutInQuint;
+		InSine    = InSine;    OutSine    = OutSine;    InOutSine    = InOutSine;    OutInSine    = OutInSine;
+		InExpo    = InExpo;    OutExpo    = OutExpo;    InOutExpo    = InOutExpo;    OutInExpo    = OutInExpo;
+		InCirc    = InCirc;    OutCirc    = OutCirc;    InOutCirc    = InOutCirc;    OutInCirc    = OutInCirc;
+		InElastic = InElastic; OutElastic = OutElastic; InOutElastic = InOutElastic; OutInElastic = OutInElastic;
+		InBack    = InBack;    OutBack    = OutBack;    InOutBack    = InOutBack;    OutInBack    = OutInBack;
+		InBounce  = InBounce;  OutBounce  = OutBounce;  InOutBounce  = InOutBounce;  OutInBounce  = OutInBounce;
 	}
 end
 
 local typeof = typeof
 local setmetatable = setmetatable
-if not typeof then -- @author Tomarty
-	local type = type
-	local pcall = pcall
-	local dump = string.dump
-	local sub = string.sub
-	local lookup = setmetatable({}, {
-		__index = function(self, result)
-			local rtype = sub(result, 48, -2)
-			if rtype == "Object" then
-				rtype = "Instance"
-			end
-			self[result] = rtype
-			return rtype
-		end
-	})
-
-	function typeof(val)
-		local rtype = type(val)
-		if rtype == "userdata" then
-			local _, result = pcall(dump, val)
-			return lookup[result]
-		else
-			return rtype
-		end
-	end
-end
 
 local Lerps do
 	local function Lerp(start, finish, alpha)

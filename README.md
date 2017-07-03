@@ -5,7 +5,7 @@ First let's load the module:
 ```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Nevermore = require(ReplicatedStorage:WaitForChild("Nevermore"))
-local require = Nevermore.GetModule
+local require = Nevermore.LoadLibrary
 
 local Tween = require("Tween")
 ```
@@ -82,9 +82,9 @@ local Tween = require("Tween")
 local Easing = Tween.EasingFunctions
 ```
 
-#Bezier Module
+# Bezier Module
 Used to create Bezier functions.
-##API
+## API
 ```lua
 local EasingFunc = Bezier.new(0.17, 0.67, 0.83, 0.67)
 ```

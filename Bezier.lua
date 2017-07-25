@@ -1,6 +1,6 @@
 -- Used for interpolation curves
 -- @author Quenty
--- @optimizer Narrev
+-- @optimized and modified by Validark
 
 local Bezier = {}
 
@@ -13,22 +13,24 @@ function Bezier.new(n, r, a, w)
 		local l, z = 3*a, 3*n
 		w, r = 3*w, 3*r
 		a, n = 6*(a - 2*n), 1 - w + r
-		local m, b, q = 1 - l + z, l - 2*z, w - 2*r
+		local m, e, q = 1 - l + z, l - 2*z, w - 2*r
 		local o = 3*m
-	
-		return function(x)
-			-- @param number x [0, 1]
-			
-			local d = x
+
+		return function(t, b, c, d)
+			-- @param number t [0, 1]
+			-- @optional parmeters (see other easing functions)
+
+			t = (c or 1) * t / (d or 1) + (b or 0)
+			local f = t
 			for _ = 1, 4 do
-				local y = d*(a + o*d) + z
+				local y = f*(a + o*f) + z
 				if y == 0 then
 					break
 				else
-					d = d - (((m*d + b)*d + z)*d - x) / y
+					f = f - (((m*f + e)*f + z)*f - t) / y
 				end			
 			end
-			return ((n*d + q)*d + r)*d
+			return ((n*f + q)*f + r)*f
 		end
 	else
 		error("[Bezier] - Need 4 numbers to construct a Bezier curve")

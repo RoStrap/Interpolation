@@ -256,13 +256,13 @@ end
 local function InElastic(t, b, c, d, a, p)
 	t = t / d - 1
 	p = p or d * 0.3
-	return t == -1 and b or t == 0 and b + c or not a or a < abs(c) and -(c * 2 ^ (10 * t) * sin((t * d - p * .25) * _2pi / p)) + b or -(a * 2 ^ (10 * t) * sin((t * d - p / _2pi * asin(c/a)) * _2pi / p)) + b
+	return t == -1 and b or t == 0 and b + c or (not a or a < abs(c)) and -(c * 2 ^ (10 * t) * sin((t * d - p * .25) * _2pi / p)) + b or -(a * 2 ^ (10 * t) * sin((t * d - p / _2pi * asin(c/a)) * _2pi / p)) + b
 end
 
 local function OutElastic(t, b, c, d, a, p)
 	t = t / d
 	p = p or d * 0.3
-	return t == 0 and b or t == 1 and b + c or not a or a < abs(c) and c * 2 ^ (-10 * t) * sin((t * d - p * .25) * _2pi / p) + c + b or a * 2 ^ (-10 * t) * sin((t * d - p / _2pi * asin(c / a)) * _2pi / p) + c + b
+	return t == 0 and b or t == 1 and b + c or (not a or a < abs(c)) and c * 2 ^ (-10 * t) * sin((t * d - p * .25) * _2pi / p) + c + b or a * 2 ^ (-10 * t) * sin((t * d - p / _2pi * asin(c / a)) * _2pi / p) + c + b
 end
 
 local function InOutElastic(t, b, c, d, a, p)

@@ -116,8 +116,8 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	end
 
 	function self.Interpolator(Step)
+		ElapsedTime = ElapsedTime + Step
 		if Duration > ElapsedTime then
-			ElapsedTime = ElapsedTime + Step
 			Object[Property] = Lerp(StartValue, EndValue, EasingFunction(ElapsedTime, 0, 1, Duration))
 		else
 			StopTween(self, true)
@@ -147,8 +147,8 @@ function Tween.new(Duration, EasingFunction, Callback)
 	end
 
 	function self.Interpolator(Step)
+		ElapsedTime = ElapsedTime + Step
 		if Duration > ElapsedTime then
-			ElapsedTime = ElapsedTime + Step
 			Callback(EasingFunction(ElapsedTime, 0, 1, Duration))
 		else
 			Callback(1)

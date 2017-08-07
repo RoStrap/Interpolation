@@ -25,9 +25,8 @@ return {
 					local y = f*(a + o*f) + z
 					if y == 0 then
 						break
-					else
-						f = f - (((m*f + e)*f + z)*f - t) / y
-					end			
+					end
+					f = f - (((m*f + e)*f + z)*f - t) / y
 				end
 				return ((n*f + q)*f + r)*f
 			end

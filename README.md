@@ -4,7 +4,7 @@ Nevermore's premier Tween Module built for Roblox. Allows you to write interpola
 First let's load the module:
 ```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Nevermore = require(ReplicatedStorage:WaitForChild("Nevermore"))
+local Nevermore = require(ReplicatedStorage:WaitForChild("Resources"))
 local require = Nevermore.LoadLibrary
 
 local Tween = require("Tween")

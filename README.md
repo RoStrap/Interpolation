@@ -27,7 +27,7 @@ Tween(
 	function(TweenStatus) callback = nil
 )
 
-Tween(workspace.Part, "CFrame", CFrame(10, 10, 10), "Out", "Quad", 2, true)
+Tween(workspace.Part, "CFrame", CFrame.new(10, 10, 10), "Out", "Quad", 2, true)
 
 -- The nil in the following statement isn't read by the script
 Tween(workspace.Part, "Transparency", 1, nil, "Linear", 2, true)

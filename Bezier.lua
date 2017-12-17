@@ -1,4 +1,5 @@
 -- Used for interpolation curves
+-- @readme https://github.com/RoStrap/Tween#bezier-module
 -- @author Validark
 -- @original Quenty
 

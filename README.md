@@ -1,11 +1,11 @@
 # Tween Module
-Nevermore's premier Tween Module built for Roblox. Allows you to write interpolation code faster with a clear and simple API.
+RoStrap's premier Tween Module built for Roblox. Allows you to write interpolation code faster with a clear and simple API.
 ## Declaration
 First let's load the module:
 ```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Nevermore = require(ReplicatedStorage:WaitForChild("Resources"))
-local require = Nevermore.LoadLibrary
+local Resources = require(ReplicatedStorage:WaitForChild("Resources"))
+local require = Resources.LoadLibrary
 
 local Tween = require("Tween")
 ```

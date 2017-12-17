@@ -1,22 +1,12 @@
 -- @author Validark
 -- @readme https://github.com/RoStrap/Tween
 
-local RunService = game:GetService("RunService")
-local Easing = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources")).LoadLibrary("Easing")
+local require = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources")).LoadLibrary
+local Easing = require("Easing")
 local Lerps do
 	-- Lerp functions for various property types
 	-- @author Validark
 	-- @author Sharksie (NumberSequence Lerp)
-	
-	local newRect = Rect.new
-	local newUDim = UDim.new
-	local newRegion3 = Region3.new
-	local newVector3 = Vector3.new
-	local newNumberRange = NumberRange.new
-	local newColorSequence = ColorSequence.new
-	local newNumberSequence = NumberSequence.new
-	local newPhysicalProperties = PhysicalProperties.new
-	local newNumberSequenceKeypoint = NumberSequenceKeypoint.new
 	
 	local function Lerp(start, finish, alpha)
 		return start + alpha * (finish - start)
@@ -28,30 +18,27 @@ local Lerps do
 		return a.Time < b.Time
 	end
 	
-	local insert = table.insert
-	local sort = table.sort
-	
 	Lerps = {
 		number = Lerp;
 		Color3 = Color3Lerp;
 		UDim2 = UDim2.new().Lerp;
 		CFrame = CFrame.new().Lerp;
 		Vector2 = Vector2.new().Lerp;
-		Vector3 = newVector3().Lerp;
+		Vector3 = Vector3.new().Lerp;
 	
 		UDim = function(start, finish, alpha)
-			return newUDim(Lerp(start.Scale, finish.Scale, alpha), Lerp(start.Offset, finish.Offset, alpha))
+			return UDim.new(Lerp(start.Scale, finish.Scale, alpha), Lerp(start.Offset, finish.Offset, alpha))
 		end;
 	
 		Rect = function(start, finish, alpha)
-			return newRect(
+			return Rect.new(
 				Lerp(start.Min.X, finish.Min.X, alpha), Lerp(start.Min.Y, finish.Min.Y, alpha),
 				Lerp(start.Max.X, finish.Max.X, alpha), Lerp(start.Max.Y, finish.Max.Y, alpha)
 			)
 		end;
 	
 		PhysicalProperties = function(start, finish, alpha)
-			return newPhysicalProperties(
+			return PhysicalProperties.new(
 				Lerp(start.Density, finish.Density, alpha),
 				Lerp(start.Friction, finish.Friction, alpha),
 				Lerp(start.Elasticity, finish.Elasticity, alpha),
@@ -61,11 +48,11 @@ local Lerps do
 		end;
 	
 		NumberRange = function(start, finish, alpha)
-			return newNumberRange(Lerp(start.Min, finish.Min, alpha), Lerp(start.Max, finish.Max, alpha))
+			return NumberRange.new(Lerp(start.Min, finish.Min, alpha), Lerp(start.Max, finish.Max, alpha))
 		end;
 	
 		ColorSequence = function(start, finish, alpha)
-			return newColorSequence(Color3Lerp(start[1], finish[1], alpha), Color3Lerp(start[2], finish[2], alpha))
+			return ColorSequence.new(Color3Lerp(start[1], finish[1], alpha), Color3Lerp(start[2], finish[2], alpha))
 		end;
 	
 		Region3 = function(start, finish, alpha) -- @author Sharksie
@@ -79,19 +66,19 @@ local Lerps do
 			local iminz = imin.z
 			local imaxz = imax.z
 	
-			return newRegion3(
-				newVector3(iminx < imaxx and iminx or imaxx, iminy < imaxy and iminy or imaxy, iminz < imaxz and iminz or imaxz),
-				newVector3(iminx > imaxx and iminx or imaxx, iminy > imaxy and iminy or imaxy, iminz > imaxz and iminz or imaxz)
+			return Region3.new(
+				Vector3.new(iminx < imaxx and iminx or imaxx, iminy < imaxy and iminy or imaxy, iminz < imaxz and iminz or imaxz),
+				Vector3.new(iminx > imaxx and iminx or imaxx, iminy > imaxy and iminy or imaxy, iminz > imaxz and iminz or imaxz)
 			)
 		end;
 	
-		NumberSequence = function(start, finish, alpha) -- @author Sharksie
-			--[[
-				For each point on each line, find the values of the other sequence at that point in time through interpolation
-					then interpolate between the known value and the learned value
-					then use that value to create a new keypoint at the time
-					then build a new sequence using all the keypoints generated
-			--]]
+		NumberSequence = function(start, finish, alpha)
+			-- @author Sharksie
+
+			-- For each point on each line, find the values of the other sequence at that point in time through interpolation
+			-- 	then interpolate between the known value and the learned value
+			-- 	then use that value to create a new keypoint at the time
+			-- 	then build a new sequence using all the keypoints generated
 	
 			local keypoints = {}
 			local addedTimes = {}
@@ -120,9 +107,9 @@ local Lerps do
 				end
 				local interValue = (bValue - ap.Value)*alpha + ap.Value
 				local interEnvelope = (bEnvelope - ap.Envelope)*alpha + ap.Envelope
-				local interp = newNumberSequenceKeypoint(ap.Time, interValue, interEnvelope)
+				local interp = NumberSequenceKeypoint.new(ap.Time, interValue, interEnvelope)
 	
-				insert(keypoints, interp)
+				table.insert(keypoints, interp)
 	
 				addedTimes[ap.Time] = true
 			end
@@ -152,20 +139,20 @@ local Lerps do
 					end
 					local interValue = (bp.Value - aValue)*alpha + aValue
 					local interEnvelope = (bp.Envelope - aEnvelope)*alpha + aEnvelope
-					local interp = newNumberSequenceKeypoint(bp.Time, interValue, interEnvelope)
+					local interp = NumberSequenceKeypoint.new(bp.Time, interValue, interEnvelope)
 	
-					insert(keypoints, interp)
+					table.insert(keypoints, interp)
 				end
 			end
 	
-			sort(keypoints, sortByTime)
+			table.sort(keypoints, sortByTime)
 	
-			return newNumberSequence(keypoints)
+			return NumberSequence.new(keypoints)
 		end;
 	}
 end
 
-local Heartbeat = RunService.Heartbeat
+local Heartbeat = game:GetService("RunService").Heartbeat
 
 local Completed = Enum.TweenStatus.Completed
 local Canceled = Enum.TweenStatus.Canceled
@@ -216,10 +203,9 @@ local TweenObject = {
 }
 TweenObject.__index = TweenObject
 
-local Tweens = {}
+local OpenTweens = {}
 local Tween = {
-	OpenTweens = Tweens;
-	EasingFunctions = Easing;
+	OpenTweens = OpenTweens;
 }
 
 function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, Duration, Override, Callback, PropertyType)
@@ -255,7 +241,7 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	local Lerp = Lerps[PropertyType or typeof(EndValue)]
 	local ElapsedTime, Connection = 0
 	local self = setmetatable({Callback = Callback; Property = Property}, TweenObject)
-	local ObjectTable = Tweens[Object]
+	local ObjectTable = OpenTweens[Object]
 
 	if ObjectTable then
 		local OpenTween = ObjectTable[Property]
@@ -268,7 +254,7 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 		end
 	else
 		ObjectTable = {}
-		Tweens[Object] = ObjectTable
+		OpenTweens[Object] = ObjectTable
 	end
 
 	function self:ResetElapsedTime()

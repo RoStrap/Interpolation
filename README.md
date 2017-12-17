@@ -5,9 +5,8 @@ First let's load the module:
 ```lua
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Resources = require(ReplicatedStorage:WaitForChild("Resources"))
-local require = Resources.LoadLibrary
 
-local Tween = require("Tween")
+local Tween = Resources:LoadLibrary("Tween")
 ```
 Once you've loaded the Tween Module, there are two ways to create a Tween. You can either interpolate a property of an object, or create a custom Tween with a function you want called each frame.
 
@@ -76,10 +75,9 @@ You need to specify the directon of EasingFunctions that aren't "Directionless":
 |                  |   InBack  |   OutBack  |   InOutBack  |   OutInBack  |
 |                  |  InBounce |  OutBounce |  InOutBounce |  OutInBounce |
 
-If you really need to, you can access the EasingFunctions for use with other modules through the following:
+If you want to, you can access the EasingFunctions for use with other modules through the following:
 ```lua
-local Tween = require("Tween")
-local Easing = Tween.EasingFunctions
+local Easing = Resources:LoadLibrary("Easing")
 ```
 
 # Bezier Module

@@ -1,8 +1,9 @@
 -- @author Validark
 -- @readme https://github.com/RoStrap/Tween
 
-local require = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources")).LoadLibrary
-local Easing = require("Easing")
+local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
+local Easing = Resources:LoadLibrary("Easing")
+
 local Lerps do
 	-- Lerp functions for various property types
 	-- @author Validark

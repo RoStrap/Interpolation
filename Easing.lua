@@ -374,18 +374,8 @@ local function OutInBounce(t, b, c, d)
 	end
 end
 
-local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
-local Bezier = Resources:LoadLibrary("Bezier")
-
--- Taken from https://material.io/guidelines/motion/duration-easing.html#duration-easing-natural-easing-curves
-local Sharp = Bezier.new(0.4, 0, 0.6, 1)
-local Standard = Bezier.new(0.4, 0, 0.2, 1)
-local Acceleration = Bezier.new(0.4, 0, 1, 1)
-local Deceleration = Bezier.new(0, 0, 0.2, 1)
-
 return {
-	Linear = Linear; Spring = Spring; SoftSpring = SoftSpring; RevBack = RevBack; RidiculousWiggle = RidiculousWiggle;
-	Smooth = Smooth; Smoother = Smoother; Sharp = Sharp; Standard = Standard; Acceleration = Acceleration; Deceleration = Deceleration;
+	Linear = Linear; Spring = Spring; SoftSpring = SoftSpring; RevBack = RevBack; RidiculousWiggle = RidiculousWiggle; Smooth = Smooth; Smoother = Smoother;
 
 	InQuad    = InQuad;    OutQuad    = OutQuad;    InOutQuad    = InOutQuad;    OutInQuad    = OutInQuad;
 	InCubic   = InCubic;   OutCubic   = OutCubic;   InOutCubic   = InOutCubic;   OutInCubic   = OutInCubic;

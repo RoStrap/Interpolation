@@ -318,13 +318,13 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	end
 
 	if type(EasingStyle) == "number" then
-		Duration, Override, Callback, PropertyType = EasingStyle, Duration, Override, Callback
+		EasingStyle, Duration, Override, Callback, PropertyType = "", EasingStyle, Duration, Override, Callback
 	end
-		
+			
 	if EasingFunction == "function" then
 		EasingFunction = EasingDirection
 	else
-		EasingFunction = Easing[EasingDirection and EasingDirection .. (type(EasingStyle) == "string" and EasingStyle or "") or EasingStyle] or Easing[EasingStyle]
+		EasingFunction = Easing[EasingDirection] or Easing[EasingDirection and EasingDirection .. EasingStyle or EasingStyle] or Easing[EasingStyle]
 	end
 	
 	local StartValue = Object[Property]

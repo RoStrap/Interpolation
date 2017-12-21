@@ -317,16 +317,16 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 		EasingDirection = EasingDirection.Name
 	end
 
-	if EasingFunction == "function" then
-		EasingFunction = EasingDirection
-	else
-		EasingFunction = Easing[EasingDirection and EasingDirection .. EasingStyle or EasingStyle] or Easing[EasingStyle]
-	end
-	
 	if type(EasingStyle) == "number" then
 		Duration, Override, Callback, PropertyType = EasingStyle, Duration, Override, Callback
 	end
-
+		
+	if EasingFunction == "function" then
+		EasingFunction = EasingDirection
+	else
+		EasingFunction = Easing[EasingDirection and EasingDirection .. (type(EasingStyle) == "string" and EasingStyle or "") or EasingStyle] or Easing[EasingStyle]
+	end
+	
 	local StartValue = Object[Property]
 	local Lerp = Lerps[PropertyType or typeof(EndValue)]
 	local ElapsedTime, Connection = 0

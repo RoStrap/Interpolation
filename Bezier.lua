@@ -41,8 +41,8 @@ function Bezier.new(x1, y1, x2, y2)
 	local l, m = 1 - 3*y2 + k, 3*y2 - 2*k
 	
 	-- Precompute samples table
-	local SampleValues = {}
-	for a = 1, K_SPLINE_TABLE_SIZE do
+	local SampleValues = {}	
+	for a = 0, K_SPLINE_TABLE_SIZE - 1 do
 		local z = a*K_SAMPLE_STEP_SIZE
 		SampleValues[a] = ((g*z + h)*z + e)*z -- CalcBezier
 	end
@@ -54,18 +54,17 @@ function Bezier.new(x1, y1, x2, y2)
 			return t
 		end
 
-		local CurrentSample
+		local IntervalStart, GuessForT
 
-		for a = 2, K_SPLINE_TABLE_SIZE - 1 do
+		for a = 1, K_SPLINE_TABLE_SIZE - 2 do
 			if SampleValues[a] > t then
-				CurrentSample = a - 1
+				-- Interpolate to provide an initial guess for t
+				IntervalStart = (a - 1)*K_SAMPLE_STEP_SIZE
+				GuessForT = IntervalStart + K_SAMPLE_STEP_SIZE*(t - SampleValues[a - 1]) / (SampleValues[a] - SampleValues[a - 1])
 				break
 			end
 		end
-
-		-- Interpolate to provide an initial guess for t
-		local IntervalStart = CurrentSample*K_SAMPLE_STEP_SIZE
-		local GuessForT = IntervalStart + K_SAMPLE_STEP_SIZE*(t - SampleValues[CurrentSample]) / (SampleValues[CurrentSample + 1] - SampleValues[CurrentSample])
+		
 		local InitialSlope = (i*GuessForT + j)*GuessForT + e
 
 		if InitialSlope >= NEWTON_MIN_SLOPE then

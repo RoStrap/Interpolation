@@ -71,10 +71,9 @@ You need to specify the directon of EasingFunctions that aren't "Directionless":
 | RidiculousWiggle |   InSine  |   OutSine  |   InOutSine  |   OutInSine  |
 |      Smooth      |   InExpo  |   OutExpo  |   InOutExpo  |   OutInExpo  |
 |     Smoother     |   InCirc  |   OutCirc  |   InOutCirc  |   OutInCirc  |
-|   Acceleration   | InElastic | OutElastic | InOutElastic | OutInElastic |
-|   Deceleration   |   InBack  |   OutBack  |   InOutBack  |   OutInBack  |
-|       Sharp      |  InBounce |  OutBounce |  InOutBounce |  OutInBounce |
-|     Standard     |
+|                  | InElastic | OutElastic | InOutElastic | OutInElastic |
+|                  |   InBack  |   OutBack  |   InOutBack  |   OutInBack  |
+|                  |  InBounce |  OutBounce |  InOutBounce |  OutInBounce |
 
 If you want to, you can access the EasingFunctions for use with other modules through the following:
 ```lua

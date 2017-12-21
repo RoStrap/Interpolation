@@ -66,12 +66,12 @@ function Bezier.new(x1, y1, x2, y2)
 		-- Interpolate to provide an initial guess for t
 		local IntervalStart = CurrentSample*K_SAMPLE_STEP_SIZE
 		local GuessForT = IntervalStart + K_SAMPLE_STEP_SIZE*(t - SampleValues[CurrentSample]) / (SampleValues[CurrentSample + 1] - SampleValues[CurrentSample])
-		local InitialSlope = GuessForT*(i*GuessForT + j) + e
+		local InitialSlope = (i*GuessForT + j)*GuessForT + e
 
 		if InitialSlope >= NEWTON_MIN_SLOPE then
 			-- NewtonRaphsonIterate
 			for _ = 1, NEWTON_ITERATIONS do
-				local CurrentSlope = GuessForT*(i*GuessForT + j) + e
+				local CurrentSlope = (i*GuessForT + j)*GuessForT + e
 				if CurrentSlope == 0 then break end
 				GuessForT = GuessForT - (((g*GuessForT + h)*GuessForT + e)*GuessForT - t) / CurrentSlope
 			end

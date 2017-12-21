@@ -1,4 +1,10 @@
 -- Smooth Interpolation Curve Generator
+-- @readme https://github.com/RoStrap/Tween#bezier-module
+-- @see Validark
+-- @original https://github.com/gre/bezier-easing
+-- @testsite http://cubic-bezier.com/
+-- @testsite http://greweb.me/bezier-easing-editor/example/
+
 -- Bezier.new(x1, y1, x2, y2)
 -- @param numbers (x1, y1, x2, y2) The control points of your curve
 -- @returns function(t [b, c, d])
@@ -6,11 +12,6 @@
 --	@param number b beginning value being interpolated (default = 0)
 --	@param number c change in value being interpolated (equivalent to: ending - beginning) (default = 1)
 --	@param number d duration interpolation is occurring over (default = 1)
--- @see Validark
--- @readme https://github.com/RoStrap/Tween#bezier-module
--- @original https://github.com/gre/bezier-easing
--- @testsite http://cubic-bezier.com/
--- @testsite http://greweb.me/bezier-easing-editor/example/
 
 -- These values are established by empiricism with tests (tradeoff: performance VS precision)
 local NEWTON_ITERATIONS = 4
@@ -30,6 +31,7 @@ local Bezier = {}
 function Bezier.new(x1, y1, x2, y2)
 	if not (x1 and y1 and x2 and y2) then error("[Bezier] Need 4 numbers to construct a Bezier curve", 2) end
 	if not (0 <= x1 and x1 <= 1 and 0 <= x2 and x2 <= 1) then error("[Bezier] The x values must be within range [0, 1]", 2) end
+
 	if x1 == y1 and x2 == y2 then
 		return Linear
 	end
@@ -41,7 +43,7 @@ function Bezier.new(x1, y1, x2, y2)
 	local l, m = 1 - 3*y2 + k, 3*y2 - 2*k
 	
 	-- Precompute samples table
-	local SampleValues = {}	
+	local SampleValues = {}
 	for a = 0, K_SPLINE_TABLE_SIZE - 1 do
 		local z = a*K_SAMPLE_STEP_SIZE
 		SampleValues[a] = ((g*z + h)*z + e)*z -- CalcBezier
@@ -54,22 +56,22 @@ function Bezier.new(x1, y1, x2, y2)
 			return t
 		end
 
-		local IntervalStart, GuessForT
+		local CurrentSample = K_SPLINE_TABLE_SIZE - 2
 
-		for a = 1, K_SPLINE_TABLE_SIZE - 2 do
+		for a = 1, CurrentSample do
 			if SampleValues[a] > t then
-				-- Interpolate to provide an initial guess for t
-				IntervalStart = (a - 1)*K_SAMPLE_STEP_SIZE
-				GuessForT = IntervalStart + K_SAMPLE_STEP_SIZE*(t - SampleValues[a - 1]) / (SampleValues[a] - SampleValues[a - 1])
+				CurrentSample = a - 1
 				break
 			end
 		end
-		
+
+		-- Interpolate to provide an initial guess for t
+		local IntervalStart = CurrentSample*K_SAMPLE_STEP_SIZE
+		local GuessForT = IntervalStart + K_SAMPLE_STEP_SIZE*(t - SampleValues[CurrentSample]) / (SampleValues[CurrentSample + 1] - SampleValues[CurrentSample])
 		local InitialSlope = (i*GuessForT + j)*GuessForT + e
 
 		if InitialSlope >= NEWTON_MIN_SLOPE then
-			-- NewtonRaphsonIterate
-			for _ = 1, NEWTON_ITERATIONS do
+			for NewtonRaphsonIterate = 1, NEWTON_ITERATIONS do
 				local CurrentSlope = (i*GuessForT + j)*GuessForT + e
 				if CurrentSlope == 0 then break end
 				GuessForT = GuessForT - (((g*GuessForT + h)*GuessForT + e)*GuessForT - t) / CurrentSlope
@@ -77,8 +79,7 @@ function Bezier.new(x1, y1, x2, y2)
 		elseif InitialSlope ~= 0 then
 			local IntervalStep = IntervalStart + K_SAMPLE_STEP_SIZE
 
-			-- Binary Subdivide
-			for _ = 1, SUBDIVISION_MAX_ITERATIONS do
+			for BinarySubdivide = 1, SUBDIVISION_MAX_ITERATIONS do
 				GuessForT = IntervalStart + 0.5*(IntervalStep - IntervalStart)
 				local BezierCalculation = ((g*GuessForT + h)*GuessForT + e)*GuessForT - t
 

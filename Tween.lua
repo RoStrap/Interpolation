@@ -115,6 +115,13 @@ local Lerps do
 		CFrame = CFrame.new().Lerp;
 		Vector2 = Vector2.new().Lerp;
 		Vector3 = Vector3.new().Lerp;
+		
+		string = function(start, finish, alpha)
+			-- Very simple, doesn't yet take into account previous string
+			local count = #finish
+			local a = 1 + count*alpha
+			return finish:sub(1, a < count and a or count)
+		end;
 	
 		UDim = function(start, finish, alpha)
 			return UDim.new(Lerp(start.Scale, finish.Scale, alpha), Lerp(start.Offset, finish.Offset, alpha))
@@ -257,7 +264,11 @@ local function StopTween(self, Finished)
 		end
 	end
 	local Callback = self.Callback
-	if Callback then
+	if Callback == true then
+		if Finished then
+			self.Object:Destroy()
+		end
+	elseif Callback then
 		Callback(Finished and Completed or Canceled)
 	end
 	return self
@@ -328,9 +339,11 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	end
 	
 	local StartValue = Object[Property]
-	local Lerp = Lerps[PropertyType or typeof(EndValue)]
+	local Lerp = Lerps[PropertyType or typeof(EndValue)] or function()
+		return EndValue
+	end
 	local ElapsedTime, Connection = 0
-	local self = setmetatable({Callback = Callback; Property = Property}, TweenObject)
+	local self = setmetatable({Callback = Callback; Object = Object; Property = Property}, TweenObject)
 	local ObjectTable = OpenTweens[Object]
 
 	if ObjectTable then

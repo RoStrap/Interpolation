@@ -1,5 +1,5 @@
 -- @author Validark
--- @readme https://github.com/RoStrap/Tween
+-- @readme https://github.com/RoStrap/Interpolation
 
 local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
 local Easing = Resources:LoadLibrary("Easing")
@@ -9,8 +9,8 @@ local Lerps do
 	-- @author Validark
 	-- @author Sharksie (NumberSequence Lerp)
 	
-	local function Lerp(start, finish, alpha)
-		return start + alpha * (finish - start)
+	local function Lerp(Start, Finish, Alpha)
+		return Start + Alpha * (Finish - Start)
 	end
 		
 	local Color3Lerp do
@@ -316,8 +316,6 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	-- @param Number time
 	-- @param String EasingName
 
-	Duration = Duration or 1
-
 	local EasingFunction = typeof(EasingDirection)
 
 	if typeof(EasingStyle) == "EnumItem" then
@@ -327,10 +325,12 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	if EasingFunction == "EnumItem" then
 		EasingDirection = EasingDirection.Name
 	end
-
+	
 	if type(EasingStyle) == "number" then
 		EasingStyle, Duration, Override, Callback, PropertyType = "", EasingStyle, Duration, Override, Callback
 	end
+	
+	Duration = Duration or 1
 			
 	if EasingFunction == "function" then
 		EasingFunction = EasingDirection
@@ -339,13 +339,11 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	end
 	
 	local StartValue = Object[Property]
-	local Lerp = Lerps[PropertyType or typeof(EndValue)] or function()
-		return EndValue
-	end
+	local Lerp = Lerps[PropertyType or typeof(EndValue)] or function() return EndValue end
 	local ElapsedTime, Connection = 0
 	local self = setmetatable({Callback = Callback; Object = Object; Property = Property}, TweenObject)
 	local ObjectTable = OpenTweens[Object]
-
+	
 	if ObjectTable then
 		local OpenTween = ObjectTable[Property]
 		if OpenTween then

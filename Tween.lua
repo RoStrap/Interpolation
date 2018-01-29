@@ -379,7 +379,7 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	return ResumeTween(self)
 end
 
-function Tween.new(Duration, EasingFunction, Callback)
+function Tween.new(Duration, EasingFunction, Callback, Arg)
 	Duration = Duration or 1
 
 	if type(EasingFunction) == "string" then
@@ -397,9 +397,9 @@ function Tween.new(Duration, EasingFunction, Callback)
 	function self.Interpolator(Step)
 		ElapsedTime = ElapsedTime + Step
 		if Duration > ElapsedTime then
-			Callback(EasingFunction(ElapsedTime, 0, 1, Duration))
+			Callback(EasingFunction(ElapsedTime, 0, 1, Duration), Arg)
 		else
-			Callback(1)
+			Callback(1, Arg)
 			StopTween(self)
 		end
 	end

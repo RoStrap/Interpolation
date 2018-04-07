@@ -41,7 +41,7 @@ function Bezier.new(x1, y1, x2, y2)
 	local g, h, i = 1 - f + e, f - 2*e, 3*(1 - f + e)
 	local j, k = 2*h, 3*y1
 	local l, m = 1 - 3*y2 + k, 3*y2 - 2*k
-	
+
 	-- Precompute samples table
 	local SampleValues = {}
 	for a = 0, K_SPLINE_TABLE_SIZE - 1 do

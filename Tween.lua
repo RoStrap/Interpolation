@@ -8,11 +8,11 @@ local Lerps do
 	-- Lerp functions for various property types
 	-- @author Validark
 	-- @author Sharksie (NumberSequence Lerp)
-	
+
 	local function Lerp(Start, Finish, Alpha)
 		return Start + Alpha * (Finish - Start)
 	end
-		
+
 	local Color3Lerp do
 		-- Combines two colors in CIELUV space.
 		-- Color3 LerpCIELUV(Color3 fromColor, Color3 toColor, float t)
@@ -103,11 +103,11 @@ local Lerps do
 			-- end
 		end
 	end
-	
+
 	local function sortByTime(a, b)
 		return a.Time < b.Time
 	end
-	
+
 	Lerps = {
 		number = Lerp;
 		Color3 = Color3Lerp;
@@ -115,25 +115,25 @@ local Lerps do
 		CFrame = CFrame.new().Lerp;
 		Vector2 = Vector2.new().Lerp;
 		Vector3 = Vector3.new().Lerp;
-		
+
 		string = function(start, finish, alpha)
 			-- Very simple, doesn't yet take into account previous string
 			local count = #finish
 			local a = 1 + count*alpha
 			return finish:sub(1, a < count and a or count)
 		end;
-	
+
 		UDim = function(start, finish, alpha)
 			return UDim.new(Lerp(start.Scale, finish.Scale, alpha), Lerp(start.Offset, finish.Offset, alpha))
 		end;
-	
+
 		Rect = function(start, finish, alpha)
 			return Rect.new(
 				Lerp(start.Min.X, finish.Min.X, alpha), Lerp(start.Min.Y, finish.Min.Y, alpha),
 				Lerp(start.Max.X, finish.Max.X, alpha), Lerp(start.Max.Y, finish.Max.Y, alpha)
 			)
 		end;
-	
+
 		PhysicalProperties = function(start, finish, alpha)
 			return PhysicalProperties.new(
 				Lerp(start.Density, finish.Density, alpha),
@@ -143,32 +143,32 @@ local Lerps do
 				Lerp(start.ElasticityWeight, finish.ElasticityWeight, alpha)
 			)
 		end;
-	
+
 		NumberRange = function(start, finish, alpha)
 			return NumberRange.new(Lerp(start.Min, finish.Min, alpha), Lerp(start.Max, finish.Max, alpha))
 		end;
-	
+
 		ColorSequence = function(start, finish, alpha)
 			return ColorSequence.new(Color3Lerp(start[1], finish[1], alpha), Color3Lerp(start[2], finish[2], alpha))
 		end;
-	
+
 		Region3 = function(start, finish, alpha) -- @author Sharksie
 			local imin = Lerp(start.CFrame * (-start.Size*0.5), finish.CFrame * (-finish.Size*0.5), alpha)
 			local imax = Lerp(start.CFrame * ( start.Size*0.5), finish.CFrame * ( finish.Size*0.5), alpha)
-	
+
 			local iminx = imin.x
 			local imaxx = imax.x
 			local iminy = imin.y
 			local imaxy = imax.y
 			local iminz = imin.z
 			local imaxz = imax.z
-	
+
 			return Region3.new(
 				Vector3.new(iminx < imaxx and iminx or imaxx, iminy < imaxy and iminy or imaxy, iminz < imaxz and iminz or imaxz),
 				Vector3.new(iminx > imaxx and iminx or imaxx, iminy > imaxy and iminy or imaxy, iminz > imaxz and iminz or imaxz)
 			)
 		end;
-	
+
 		NumberSequence = function(start, finish, alpha)
 			-- @author Sharksie
 
@@ -176,13 +176,13 @@ local Lerps do
 			-- 	then interpolate between the known value and the learned value
 			-- 	then use that value to create a new keypoint at the time
 			-- 	then build a new sequence using all the keypoints generated
-	
+
 			local keypoints = {}
 			local addedTimes = {}
-	
+
 			for i, ap in next, start.Keypoints do
 				local closestAbove, closestBelow
-	
+
 				for i, bp in next, finish.Keypoints do
 					if bp.Time == ap.Time then
 						closestAbove, closestBelow = bp, bp
@@ -193,7 +193,7 @@ local Lerps do
 						closestAbove = bp
 					end
 				end
-	
+
 				local bValue, bEnvelope
 				if closestAbove == closestBelow then
 					bValue, bEnvelope = closestAbove.Value, closestAbove.Envelope
@@ -205,16 +205,16 @@ local Lerps do
 				local interValue = (bValue - ap.Value)*alpha + ap.Value
 				local interEnvelope = (bEnvelope - ap.Envelope)*alpha + ap.Envelope
 				local interp = NumberSequenceKeypoint.new(ap.Time, interValue, interEnvelope)
-	
+
 				table.insert(keypoints, interp)
-	
+
 				addedTimes[ap.Time] = true
 			end
-	
+
 			for i, bp in next, finish.Keypoints do
 				if not addedTimes[bp.Time] then
 					local closestAbove, closestBelow
-	
+
 					for i, ap in next, start.Keypoints do
 						if ap.Time == bp.Time then
 							closestAbove, closestBelow = ap, ap
@@ -225,7 +225,7 @@ local Lerps do
 							closestAbove = ap
 						end
 					end
-	
+
 					local aValue, aEnvelope
 					if closestAbove == closestBelow then
 						aValue, aEnvelope = closestAbove.Value, closestAbove.Envelope
@@ -237,13 +237,13 @@ local Lerps do
 					local interValue = (bp.Value - aValue)*alpha + aValue
 					local interEnvelope = (bp.Envelope - aEnvelope)*alpha + aEnvelope
 					local interp = NumberSequenceKeypoint.new(bp.Time, interValue, interEnvelope)
-	
+
 					table.insert(keypoints, interp)
 				end
 			end
-	
+
 			table.sort(keypoints, sortByTime)
-	
+
 			return NumberSequence.new(keypoints)
 		end;
 	}
@@ -325,25 +325,25 @@ function Tween:__call(Object, Property, EndValue, EasingDirection, EasingStyle, 
 	if EasingFunction == "EnumItem" then
 		EasingDirection = EasingDirection.Name
 	end
-	
+
 	if type(EasingStyle) == "number" then
 		EasingStyle, Duration, Override, Callback, PropertyType = "", EasingStyle, Duration, Override, Callback
 	end
-	
+
 	Duration = Duration or 1
-			
+
 	if EasingFunction == "function" then
 		EasingFunction = EasingDirection
 	else
 		EasingFunction = Easing[EasingDirection] or Easing[EasingDirection and EasingDirection .. EasingStyle or EasingStyle] or Easing[EasingStyle]
 	end
-	
+
 	local StartValue = Object[Property]
 	local Lerp = Lerps[PropertyType or typeof(EndValue)] or function() return EndValue end
 	local ElapsedTime, Connection = 0
 	local self = setmetatable({Callback = Callback; Object = Object; Property = Property}, TweenObject)
 	local ObjectTable = OpenTweens[Object]
-	
+
 	if ObjectTable then
 		local OpenTween = ObjectTable[Property]
 		if OpenTween then

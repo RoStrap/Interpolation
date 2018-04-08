@@ -1,3 +1,4 @@
+-- Optimized Robert Penner functions
 --[[
 	Disclaimer for Robert Penner's Easing Equations license:
 

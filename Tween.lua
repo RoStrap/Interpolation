@@ -1,3 +1,4 @@
+-- Light-weight, Bezier-friendly Tweens
 -- @author Validark
 -- @readme https://github.com/RoStrap/Interpolation
 

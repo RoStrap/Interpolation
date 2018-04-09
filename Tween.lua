@@ -1,6 +1,6 @@
 -- Light-weight, Bezier-friendly Tweens
--- @author Validark
 -- @readme https://github.com/RoStrap/Interpolation
+-- @author Validark
 
 local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
 local Easing = Resources:LoadLibrary("Easing")

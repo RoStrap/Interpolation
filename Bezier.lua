@@ -1,6 +1,6 @@
 -- Smooth Interpolation Curve Generator
 -- @readme https://github.com/RoStrap/Tween#bezier-module
--- @see Validark
+-- @author Validark
 -- @original https://github.com/gre/bezier-easing
 -- @testsite http://cubic-bezier.com/
 -- @testsite http://greweb.me/bezier-easing-editor/example/

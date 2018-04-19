@@ -1,4 +1,81 @@
--- Optimized Robert Penner functions
+-- Material design Beziers and optimized Robert Penner functions
+
+local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
+local Bezier = Resources:LoadLibrary("Bezier")
+local Enumeration = Resources:LoadLibrary("Enumeration")
+
+-- @specs https://material.io/guidelines/motion/duration-easing.html#duration-easing-natural-easing-curves
+local Sharp = Bezier.new(0.4, 0, 0.6, 1)
+local Standard = Bezier.new(0.4, 0, 0.2, 1)
+local Acceleration = Bezier.new(0.4, 0, 1, 1)
+local Deceleration = Bezier.new(0, 0, 0.2, 1)
+
+Enumeration.EasingFunction = {
+	"Standard";
+	"Deceleration";
+	"Acceleration";
+	"Sharp";
+
+	"Linear";
+
+	"InSine";
+	"OutSine";
+	"InOutSine";
+	"OutInSine";
+
+	"InBack";
+	"OutBack";
+	"InOutBack";
+	"OutInBack";
+
+	"InQuad";
+	"OutQuad";
+	"InOutQuad";
+	"OutInQuad";
+
+	"InQuart";
+	"OutQuart";
+	"InOutQuart";
+	"OutInQuart";
+
+	"InQuint";
+	"OutQuint";
+	"InOutQuint";
+	"OutInQuint";
+
+	"InBounce";
+	"OutBounce";
+	"InOutBounce";
+	"OutInBounce";
+
+	"InElastic";
+	"OutElastic";
+	"InOutElastic";
+	"OutInElastic";
+
+	"InCirc";
+	"OutCirc";
+	"InOutCirc";
+	"OutInCirc";
+
+	"InCubic";
+	"OutCubic";
+	"InOutCubic";
+	"OutInCubic";
+
+	"InExpo";
+	"OutExpo";
+	"InOutExpo";
+	"OutInExpo";
+
+	"Smooth";
+	"Smoother";
+	"RevBack";
+	"RidiculousWiggle";
+	"Spring";
+	"SoftSpring";
+}
+
 --[[
 	Disclaimer for Robert Penner's Easing Equations license:
 
@@ -374,15 +451,6 @@ local function OutInBounce(t, b, c, d)
 		return InBounce(t * 2 - d, b + c * 0.5, c * 0.5, d)
 	end
 end
-
-local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
-local Bezier = Resources:LoadLibrary("Bezier")
-
--- Taken from https://material.io/guidelines/motion/duration-easing.html#duration-easing-natural-easing-curves
-local Sharp = Bezier.new(0.4, 0, 0.6, 1)
-local Standard = Bezier.new(0.4, 0, 0.2, 1)
-local Acceleration = Bezier.new(0.4, 0, 1, 1)
-local Deceleration = Bezier.new(0, 0, 0.2, 1)
 
 return {
 	Linear = Linear; Spring = Spring; SoftSpring = SoftSpring; RevBack = RevBack; RidiculousWiggle = RidiculousWiggle;

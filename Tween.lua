@@ -18,15 +18,20 @@ local Tween = {
 	}
 }
 
+local EasingFunctionEnums = Enumeration.EasingFunction:GetEnumerationItems()
 local OpenTweens = {}
 
 function Tween.new(Duration, EasingFunction, Callback, Arg)
 	Duration = Duration or 1
-
-	if type(EasingFunction) == "string" then
+	local EasingFunctionType = type(EasingFunction)
+	if EasingFunctionType == "string" then
 		EasingFunction = Easing[Enumeration.EasingFunction[EasingFunction].Name]
+	elseif EasingFunctionType == "number" then
+		EasingFunction = Easing[EasingFunctionEnums[EasingFunction + 1].Name]
+	elseif EasingFunctionType == "userdata" then
+		EasingFunction = Easing[EasingFunction.Name]
 	end
-
+	
 	local ElapsedTime = 0
 	local self = setmetatable({}, Tween)
 
@@ -47,8 +52,6 @@ function Tween.new(Duration, EasingFunction, Callback, Arg)
 
 	return self:Resume()
 end
-
-local EasingFunctionEnums = Enumeration.EasingFunction:GetEnumerationItems()
 
 function Tween.Start(_, Object, Property, EndValue, EasingDirection, EasingStyle, Duration, Override, Callback, PropertyType)
 	-- @param Object object OR Table object OR Void Function receiver(String propertyName, Variant value),

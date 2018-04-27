@@ -22,6 +22,9 @@ local K_SPLINE_TABLE_SIZE = 11
 
 local K_SAMPLE_STEP_SIZE = 1 / (K_SPLINE_TABLE_SIZE - 1)
 
+local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
+local Debug = Resources:LoadLibrary("Debug")
+
 local function Linear(t, b, c, d)
 	return (c or 1)*t / (d or 1) + (b or 0)
 end
@@ -29,8 +32,8 @@ end
 local Bezier = {}
 
 function Bezier.new(x1, y1, x2, y2)
-	if not (x1 and y1 and x2 and y2) then error("[Bezier] Need 4 numbers to construct a Bezier curve", 2) end
-	if not (0 <= x1 and x1 <= 1 and 0 <= x2 and x2 <= 1) then error("[Bezier] The x values must be within range [0, 1]", 2) end
+	if not (x1 and y1 and x2 and y2) then Debug.Error("Need 4 numbers to construct a Bezier curve") end
+	if not (0 <= x1 and x1 <= 1 and 0 <= x2 and x2 <= 1) then Debug.Error("The x values must be within range [0, 1]") end
 
 	if x1 == y1 and x2 == y2 then
 		return Linear
@@ -93,6 +96,7 @@ function Bezier.new(x1, y1, x2, y2)
 				if BezierCalculation <= SUBDIVISION_PRECISION then break end
 			end
 		end
+
 		return ((l*GuessForT + m)*GuessForT + k)*GuessForT
 	end
 end

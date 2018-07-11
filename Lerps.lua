@@ -3,6 +3,9 @@
 -- @author Fraktality
 -- @author Sharksie (NumberSequence Lerp)
 
+local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
+local Table = Resources:LoadLibrary("Table")
+
 local function Lerp(Start, Finish, Alpha)
 	return Start + Alpha * (Finish - Start)
 end
@@ -102,7 +105,7 @@ local function sortByTime(a, b)
 	return a.Time < b.Time
 end
 
-return {
+return Table.Lock {
 	number = Lerp;
 	Color3 = Color3Lerp;
 	UDim2 = UDim2.new().Lerp;

@@ -1,6 +1,8 @@
--- Material design Beziers and optimized Robert Penner functions
+-- Prescribed Material design Beziers and optimized Robert Penner functions
+-- @author Robert Penner
 
 local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
+local Table = Resources:LoadLibrary("Table")
 local Bezier = Resources:LoadLibrary("Bezier")
 local Enumeration = Resources:LoadLibrary("Enumeration")
 
@@ -452,18 +454,68 @@ local function OutInBounce(t, b, c, d)
 	end
 end
 
-return {
-	Linear = Linear; Spring = Spring; SoftSpring = SoftSpring; RevBack = RevBack; RidiculousWiggle = RidiculousWiggle;
-	Smooth = Smooth; Smoother = Smoother; Sharp = Sharp; Standard = Standard; Acceleration = Acceleration; Deceleration = Deceleration;
+return Table.Lock {
+	[0] = Standard;
+	Deceleration;
+	Acceleration;
+	Sharp;
 
-	InQuad    = InQuad;    OutQuad    = OutQuad;    InOutQuad    = InOutQuad;    OutInQuad    = OutInQuad;
-	InCubic   = InCubic;   OutCubic   = OutCubic;   InOutCubic   = InOutCubic;   OutInCubic   = OutInCubic;
-	InQuart   = InQuart;   OutQuart   = OutQuart;   InOutQuart   = InOutQuart;   OutInQuart   = OutInQuart;
-	InQuint   = InQuint;   OutQuint   = OutQuint;   InOutQuint   = InOutQuint;   OutInQuint   = OutInQuint;
-	InSine    = InSine;    OutSine    = OutSine;    InOutSine    = InOutSine;    OutInSine    = OutInSine;
-	InExpo    = InExpo;    OutExpo    = OutExpo;    InOutExpo    = InOutExpo;    OutInExpo    = OutInExpo;
-	InCirc    = InCirc;    OutCirc    = OutCirc;    InOutCirc    = InOutCirc;    OutInCirc    = OutInCirc;
-	InElastic = InElastic; OutElastic = OutElastic; InOutElastic = InOutElastic; OutInElastic = OutInElastic;
-	InBack    = InBack;    OutBack    = OutBack;    InOutBack    = InOutBack;    OutInBack    = OutInBack;
-	InBounce  = InBounce;  OutBounce  = OutBounce;  InOutBounce  = InOutBounce;  OutInBounce  = OutInBounce;
+	Linear;
+
+	InSine;
+	OutSine;
+	InOutSine;
+	OutInSine;
+
+	InBack;
+	OutBack;
+	InOutBack;
+	OutInBack;
+
+	InQuad;
+	OutQuad;
+	InOutQuad;
+	OutInQuad;
+
+	InQuart;
+	OutQuart;
+	InOutQuart;
+	OutInQuart;
+
+	InQuint;
+	OutQuint;
+	InOutQuint;
+	OutInQuint;
+
+	InBounce;
+	OutBounce;
+	InOutBounce;
+	OutInBounce;
+
+	InElastic;
+	OutElastic;
+	InOutElastic;
+	OutInElastic;
+
+	InCirc;
+	OutCirc;
+	InOutCirc;
+	OutInCirc;
+
+	InCubic;
+	OutCubic;
+	InOutCubic;
+	OutInCubic;
+
+	InExpo;
+	OutExpo;
+	InOutExpo;
+	OutInExpo;
+
+	Smooth;
+	Smoother;
+	RevBack;
+	RidiculousWiggle;
+	Spring;
+	SoftSpring;
 }

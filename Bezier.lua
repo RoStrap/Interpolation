@@ -1,5 +1,4 @@
 -- Smooth Interpolation Curve Generator
--- @readme https://github.com/RoStrap/Tween#bezier-module
 -- @author Validark
 -- @original https://github.com/gre/bezier-easing
 -- @testsite http://cubic-bezier.com/
@@ -23,6 +22,7 @@ local K_SPLINE_TABLE_SIZE = 11
 local K_SAMPLE_STEP_SIZE = 1 / (K_SPLINE_TABLE_SIZE - 1)
 
 local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
+local Table = Resources:LoadLibrary("Table")
 local Debug = Resources:LoadLibrary("Debug")
 
 local function Linear(t, b, c, d)
@@ -101,4 +101,4 @@ function Bezier.new(x1, y1, x2, y2)
 	end
 end
 
-return Bezier
+return Table.Lock(Bezier)

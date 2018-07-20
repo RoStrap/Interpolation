@@ -11,7 +11,7 @@ local Heartbeat = game:GetService("RunService").Heartbeat
 
 local Completed = Enum.TweenStatus.Completed
 local Canceled = Enum.TweenStatus.Canceled
-local Linear = Enumeration.EasingFunction.Linear.Value
+local Linear = EasingFunctions[Enumeration.EasingFunction.Linear.Value]
 
 local Tween = {
 	__index = {
@@ -27,7 +27,7 @@ local OpenTweens = {} -- Will prevent objects from getting garbage collected unt
 
 function Tween.new(Duration, EasingFunction, Callback, Arg)
 	Duration = Duration or 1
-	EasingFunction = EasingFunction and EasingFunctions[Enumeration.EasingFunction:Cast(EasingFunction).Value] or EasingFunctions[Linear]
+	EasingFunction = EasingFunction and EasingFunctions[Enumeration.EasingFunction:Cast(EasingFunction).Value] or Linear
 
 	local self = setmetatable({
 		Duration = Duration;
@@ -85,15 +85,19 @@ function Tween.__index:Stop(Finished)
 end
 
 function Tween.__index:Resume()
-	if not self.Running then
-		self.Connection = Heartbeat:Connect(self.Interpolator)
-		self.Running = true
-		local ObjectTable = OpenTweens[self.Object]
-		if ObjectTable then
-			ObjectTable[self.Property] = self -- This is for override checks
+	if self.Duration == 0 then
+		self.Object[self.Property] = self.EndValue
+	else
+		if not self.Running then
+			self.Connection = Heartbeat:Connect(self.Interpolator)
+			self.Running = true
+			local ObjectTable = OpenTweens[self.Object]
+			if ObjectTable then
+				ObjectTable[self.Property] = self -- This is for override checks
+			end
 		end
-		return self
 	end
+	return self
 end
 
 function Tween.__index:Restart()
@@ -110,7 +114,7 @@ return Table.Lock(Tween, function(_, Object, Property, EndValue, EasingFunction,
 	Duration = Duration or 1
 	local LerpFunction = Lerps[typeof(EndValue)]
 	local StartValue = Object[Property]
-	EasingFunction = EasingFunction and EasingFunctions[Enumeration.EasingFunction:Cast(EasingFunction).Value] or EasingFunctions[Enumeration.EasingFunction.Linear.Value]
+	EasingFunction = EasingFunction and EasingFunctions[Enumeration.EasingFunction:Cast(EasingFunction).Value] or Linear
 
 	local self = setmetatable({
 		Duration = Duration;

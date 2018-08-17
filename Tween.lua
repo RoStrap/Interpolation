@@ -30,6 +30,10 @@ Tween.new = Typer.AssignSignature(Typer.OptionalNumber, Typer.OptionalFunctionOr
 	Duration = Duration or 1
 	EasingFunction = EasingFunction or Linear
 
+	if type(EasingFunction) == "userdata" then
+		EasingFunction = EasingFunctions[EasingFunctions]
+	end
+
 	local self = setmetatable({
 		Duration = Duration;
 		Callback = Callback;
@@ -116,6 +120,10 @@ return Table.Lock(Tween, Typer.AssignSignature(5, Typer.OptionalFunctionOrEnumer
 	local LerpFunction = Lerps[typeof(EndValue)]
 	local StartValue = Object[Property]
 	EasingFunction = EasingFunction or Linear
+
+	if type(EasingFunction) == "userdata" then
+		EasingFunction = EasingFunctions[EasingFunctions]
+	end
 
 	local self = setmetatable({
 		Duration = Duration;

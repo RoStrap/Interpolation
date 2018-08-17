@@ -1,9 +1,10 @@
--- Light-weight, Bezier-friendly Tweens
+-- Light-weight, Bezier-friendly Property Tweening
 -- @author Validark
 
 local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
 local Lerps = Resources:LoadLibrary("Lerps")
 local Table = Resources:LoadLibrary("Table")
+local Typer = Resources:LoadLibrary("Typer")
 local Enumeration = Resources:LoadLibrary("Enumeration")
 local EasingFunctions = Resources:LoadLibrary("EasingFunctions")
 
@@ -25,9 +26,9 @@ local Tween = {
 
 local OpenTweens = {} -- Will prevent objects from getting garbage collected until Tween finishes
 
-function Tween.new(Duration, EasingFunction, Callback, Arg)
+Tween.new = Typer.AssignSignature(Typer.OptionalNumber, Typer.OptionalFunctionOrEnumerationOfTypeEasingFunction, Typer.FunctionOrTableOrUserdata, Typer.Any, function(Duration, EasingFunction, Callback, Arg)
 	Duration = Duration or 1
-	EasingFunction = EasingFunction and EasingFunctions[Enumeration.EasingFunction:Cast(EasingFunction).Value] or Linear
+	EasingFunction = EasingFunction or Linear
 
 	local self = setmetatable({
 		Duration = Duration;
@@ -58,7 +59,7 @@ function Tween.new(Duration, EasingFunction, Callback, Arg)
 	end
 
 	return self:Resume()
-end
+end)
 
 function Tween.__index:Stop(Finished)
 	if self.Running then
@@ -110,11 +111,11 @@ function Tween.__index:Wait()
 	return self
 end
 
-return Table.Lock(Tween, function(_, Object, Property, EndValue, EasingFunction, Duration, Override, Callback, CallbackArg)
+return Table.Lock(Tween, Typer.AssignSignature(5, Typer.OptionalFunctionOrEnumerationOfTypeEasingFunction, Typer.OptionalNumber, Typer.OptionalBoolean, Typer.OptionalFunctionOrTableOrUserdata, Typer.Any, function(_, Object, Property, EndValue, EasingFunction, Duration, Override, Callback, CallbackArg)
 	Duration = Duration or 1
 	local LerpFunction = Lerps[typeof(EndValue)]
 	local StartValue = Object[Property]
-	EasingFunction = EasingFunction and EasingFunctions[Enumeration.EasingFunction:Cast(EasingFunction).Value] or Linear
+	EasingFunction = EasingFunction or Linear
 
 	local self = setmetatable({
 		Duration = Duration;
@@ -159,4 +160,4 @@ return Table.Lock(Tween, function(_, Object, Property, EndValue, EasingFunction,
 	ObjectTable[Property] = self
 
 	return self:Resume()
-end)
+end))

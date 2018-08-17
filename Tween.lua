@@ -28,11 +28,7 @@ local OpenTweens = {} -- Will prevent objects from getting garbage collected unt
 
 Tween.new = Typer.AssignSignature(Typer.OptionalNumber, Typer.OptionalFunctionOrEnumerationOfTypeEasingFunction, Typer.FunctionOrTableOrUserdata, Typer.Any, function(Duration, EasingFunction, Callback, Arg)
 	Duration = Duration or 1
-	EasingFunction = EasingFunction or Linear
-
-	if type(EasingFunction) == "userdata" then
-		EasingFunction = EasingFunctions[EasingFunction.Value]
-	end
+	EasingFunction = type(EasingFunction) == "userdata" and EasingFunctions[EasingFunction.Value] or EasingFunction or Linear
 
 	local self = setmetatable({
 		Duration = Duration;
@@ -119,11 +115,7 @@ return Table.Lock(Tween, Typer.AssignSignature(5, Typer.OptionalFunctionOrEnumer
 	Duration = Duration or 1
 	local LerpFunction = Lerps[typeof(EndValue)]
 	local StartValue = Object[Property]
-	EasingFunction = EasingFunction or Linear
-
-	if type(EasingFunction) == "userdata" then
-		EasingFunction = EasingFunctions[EasingFunction.Value]
-	end
+	EasingFunction = type(EasingFunction) == "userdata" and EasingFunctions[EasingFunction.Value] or EasingFunction or Linear
 
 	local self = setmetatable({
 		Duration = Duration;

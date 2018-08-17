@@ -31,7 +31,7 @@ Tween.new = Typer.AssignSignature(Typer.OptionalNumber, Typer.OptionalFunctionOr
 	EasingFunction = EasingFunction or Linear
 
 	if type(EasingFunction) == "userdata" then
-		EasingFunction = EasingFunctions[EasingFunctions]
+		EasingFunction = EasingFunctions[EasingFunction.Value]
 	end
 
 	local self = setmetatable({
@@ -122,7 +122,7 @@ return Table.Lock(Tween, Typer.AssignSignature(5, Typer.OptionalFunctionOrEnumer
 	EasingFunction = EasingFunction or Linear
 
 	if type(EasingFunction) == "userdata" then
-		EasingFunction = EasingFunctions[EasingFunctions]
+		EasingFunction = EasingFunctions[EasingFunction.Value]
 	end
 
 	local self = setmetatable({

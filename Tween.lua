@@ -1,6 +1,8 @@
 -- Light-weight, Bezier-friendly Property Tweening
 -- @author Validark
 
+local RunService = game:GetService("RunService")
+
 local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
 local Lerps = Resources:LoadLibrary("Lerps")
 local Table = Resources:LoadLibrary("Table")
@@ -8,7 +10,9 @@ local Typer = Resources:LoadLibrary("Typer")
 local Enumeration = Resources:LoadLibrary("Enumeration")
 local EasingFunctions = Resources:LoadLibrary("EasingFunctions")
 
-local Heartbeat = game:GetService("RunService").Heartbeat
+local SteppedFunction
+pcall(function() SteppedFunction = RunService.RenderStepped end)
+pcall(function() if RunService:IsServer() then SteppedFunction = RunService.Heartbeat end end)
 
 local Completed = Enum.TweenStatus.Completed
 local Canceled = Enum.TweenStatus.Canceled
@@ -90,7 +94,7 @@ function Tween.__index:Resume()
 		self.Object[self.Property] = self.EndValue
 	else
 		if not self.Running then
-			self.Connection = Heartbeat:Connect(self.Interpolator)
+			self.Connection = SteppedFunction:Connect(self.Interpolator)
 			self.Running = true
 			local ObjectTable = OpenTweens[self.Object]
 			if ObjectTable then
@@ -107,7 +111,7 @@ function Tween.__index:Restart()
 end
 
 function Tween.__index:Wait()
-	repeat until not self.Running or not Heartbeat:Wait()
+	repeat until not self.Running or not SteppedFunction:Wait()
 	return self
 end
 

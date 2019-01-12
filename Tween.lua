@@ -1,22 +1,33 @@
 -- Light-weight, Bezier-friendly Property Tweening
+-- @documentation https://rostrap.github.io/Libraries/Interpolation/Tween/
 -- @author Validark
 
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Resources = require(game:GetService("ReplicatedStorage"):WaitForChild("Resources"))
+local Resources = require(ReplicatedStorage:WaitForChild("Resources"))
 local Lerps = Resources:LoadLibrary("Lerps")
 local Table = Resources:LoadLibrary("Table")
 local Typer = Resources:LoadLibrary("Typer")
 local Enumeration = Resources:LoadLibrary("Enumeration")
 local EasingFunctions = Resources:LoadLibrary("EasingFunctions")
 
-local SteppedFunction
-pcall(function() SteppedFunction = RunService.RenderStepped end)
-pcall(function() if RunService:IsServer() then SteppedFunction = RunService.Heartbeat end end)
+local Heartbeat = RunService.Heartbeat
+local RenderStepped = RunService.RenderStepped
 
 local Completed = Enum.TweenStatus.Completed
 local Canceled = Enum.TweenStatus.Canceled
 local Linear = EasingFunctions[Enumeration.EasingFunction.Linear.Value]
+
+local function GetRenderEvent(self)
+	local Object = self.Object
+
+	if typeof(Object) == "Instance" and Object.ClassName == "Camera" then
+		return RenderStepped
+	else
+		return Heartbeat
+	end
+end
 
 local Tween = {
 	__index = {
@@ -94,7 +105,7 @@ function Tween.__index:Resume()
 		self.Object[self.Property] = self.EndValue
 	else
 		if not self.Running then
-			self.Connection = SteppedFunction:Connect(self.Interpolator)
+			self.Connection = GetRenderEvent(self):Connect(self.Interpolator)
 			self.Running = true
 			local ObjectTable = OpenTweens[self.Object]
 			if ObjectTable then
@@ -111,7 +122,8 @@ function Tween.__index:Restart()
 end
 
 function Tween.__index:Wait()
-	repeat until not self.Running or not SteppedFunction:Wait()
+	local Event = GetRenderEvent(self)
+	while self.Running do Event:Wait() end
 	return self
 end
 

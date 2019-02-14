@@ -111,7 +111,7 @@ Enumeration.EasingFunction = {
 
 local sin, cos, pi, abs, asin = math.sin, math.cos, math.pi, math.abs, math.asin
 local _2pi = 2 * pi
-local _halfpi = 0.5 * pi
+local _halfpi = pi / 2
 local SoftSpringpi = -3.2*pi
 local Springpi = 2*SoftSpringpi
 
@@ -132,7 +132,7 @@ end
 -- Arceusinator's Easing Functions
 local function RevBack(t, b, c, d)
 	t = 1 - t / d
-	return c*(1 - (sin(t*_halfpi) + (sin(t*pi) * (cos(t*pi) + 1)*0.5))) + b
+	return c*(1 - (sin(t*_halfpi) + (sin(t*pi) * (cos(t*pi) + 1) / 2))) + b
 end
 
 local function RidiculousWiggle(t, b, c, d)
@@ -164,15 +164,15 @@ end
 
 local function InOutQuad(t, b, c, d)
 	t = t / d * 2
-	return t < 1 and c * 0.5 * t * t + b or -c * 0.5 * ((t - 1) * (t - 3) - 1) + b
+	return t < 1 and c / 2 * t * t + b or -c / 2 * ((t - 1) * (t - 3) - 1) + b
 end
 
 local function OutInQuad(t, b, c, d)
-	if t < d * 0.5 then
+	if t < d / 2 then
 		t = 2 * t / d
-		return -0.5 * c * t * (t - 2) + b
+		return -c / 2 * t * (t - 2) + b
 	else
-		t, c = ((t * 2) - d) / d, 0.5 * c
+		t, c = ((t * 2) - d) / d, c / 2
 		return c * t * t + b + c
 	end
 end
@@ -190,19 +190,19 @@ end
 local function InOutCubic(t, b, c, d)
 	t = t / d * 2
 	if t < 1 then
-		return c * 0.5 * t * t * t + b
+		return c / 2 * t * t * t + b
 	else
 		t = t - 2
-		return c * 0.5 * (t * t * t + 2) + b
+		return c / 2 * (t * t * t + 2) + b
 	end
 end
 
 local function OutInCubic(t, b, c, d)
-	if t < d * 0.5 then
+	if t < d / 2 then
 		t = t * 2 / d - 1
-		return c * 0.5 * (t * t * t + 1) + b
+		return c / 2 * (t * t * t + 1) + b
 	else
-		t, c = ((t * 2) - d) / d, c * 0.5
+		t, c = ((t * 2) - d) / d, c / 2
 		return c * t * t * t + b + c
 	end
 end
@@ -220,19 +220,19 @@ end
 local function InOutQuart(t, b, c, d)
 	t = t / d * 2
 	if t < 1 then
-		return c * 0.5 * t * t * t * t + b
+		return c / 2 * t * t * t * t + b
 	else
 		t = t - 2
-		return -c * 0.5 * (t * t * t * t - 2) + b
+		return -c / 2 * (t * t * t * t - 2) + b
 	end
 end
 
 local function OutInQuart(t, b, c, d)
-	if t < d * 0.5 then
-		t, c = t * 2 / d - 1, c * 0.5
+	if t < d / 2 then
+		t, c = t * 2 / d - 1, c / 2
 		return -c * (t * t * t * t - 1) + b
 	else
-		t, c = ((t * 2) - d) / d, c * 0.5
+		t, c = ((t * 2) - d) / d, c / 2
 		return c * t * t * t * t + b + c
 	end
 end
@@ -250,19 +250,19 @@ end
 local function InOutQuint(t, b, c, d)
 	t = t / d * 2
 	if t < 1 then
-		return c * 0.5 * t * t * t * t * t + b
+		return c / 2 * t * t * t * t * t + b
 	else
 		t = t - 2
-		return c * 0.5 * (t * t * t * t * t + 2) + b
+		return c / 2 * (t * t * t * t * t + 2) + b
 	end
 end
 
 local function OutInQuint(t, b, c, d)
-	if t < d * 0.5 then
+	if t < d / 2 then
 		t = t * 2 / d - 1
-		return c * 0.5 * (t * t * t * t * t + 1) + b
+		return c / 2 * (t * t * t * t * t + 1) + b
 	else
-		t, c = ((t * 2) - d) / d, c * 0.5
+		t, c = ((t * 2) - d) / d, c / 2
 		return c * t * t * t * t * t + b + c
 	end
 end
@@ -276,12 +276,12 @@ local function OutSine(t, b, c, d)
 end
 
 local function InOutSine(t, b, c, d)
-	return -c * 0.5 * (cos(pi * t / d) - 1) + b
+	return -c / 2 * (cos(pi * t / d) - 1) + b
 end
 
 local function OutInSine(t, b, c, d)
-	c = c * 0.5
-	return t < d * 0.5 and c * sin(t * 2 / d * _halfpi) + b or -c * cos(((t * 2) - d) / d * _halfpi) + 2 * c + b
+	c = c / 2
+	return t < d / 2 and c * sin(t * 2 / d * _halfpi) + b or -c * cos(((t * 2) - d) / d * _halfpi) + 2 * c + b
 end
 
 local function InExpo(t, b, c, d)
@@ -294,12 +294,12 @@ end
 
 local function InOutExpo(t, b, c, d)
 	t = t / d * 2
-	return t == 0 and b or t == 2 and b + c or t < 1 and c * 0.5 * 2 ^ (10 * (t - 1)) + b - c * 0.0005 or c * 0.5 * 1.0005 * (2 - 2 ^ (-10 * (t - 1))) + b
+	return t == 0 and b or t == 2 and b + c or t < 1 and c / 2 * 2 ^ (10 * (t - 1)) + b - c * 0.0005 or c / 2 * 1.0005 * (2 - 2 ^ (-10 * (t - 1))) + b
 end
 
 local function OutInExpo(t, b, c, d)
-	c = c * 0.5
-	return t < d * 0.5 and (t * 2 == d and b + c or c * 1.001 * (1 - 2 ^ (-20 * t / d)) + b) or t * 2 - d == 0 and b + c or c * 2 ^ (10 * ((t * 2 - d) / d - 1)) + b + c - c * 0.001
+	c = c / 2
+	return t < d / 2 and (t * 2 == d and b + c or c * 1.001 * (1 - 2 ^ (-20 * t / d)) + b) or t * 2 - d == 0 and b + c or c * 2 ^ (10 * ((t * 2 - d) / d - 1)) + b + c - c * 0.001
 end
 
 local function InCirc(t, b, c, d)
@@ -315,16 +315,16 @@ end
 local function InOutCirc(t, b, c, d)
 	t = t / d * 2
 	if t < 1 then
-		return -c * 0.5 * ((1 - t * t) ^ 0.5 - 1) + b
+		return -c / 2 * ((1 - t * t) ^ 0.5 - 1) + b
 	else
 		t = t - 2
-		return c * 0.5 * ((1 - t * t) ^ 0.5 + 1) + b
+		return c / 2 * ((1 - t * t) ^ 0.5 + 1) + b
 	end
 end
 
 local function OutInCirc(t, b, c, d)
-	c = c * 0.5
-	if t < d * 0.5 then
+	c = c / 2
+	if t < d / 2 then
 		t = t * 2 / d - 1
 		return c * (1 - t * t) ^ 0.5 + b
 	else
@@ -336,13 +336,13 @@ end
 local function InElastic(t, b, c, d, a, p)
 	t = t / d - 1
 	p = p or d * 0.3
-	return t == -1 and b or t == 0 and b + c or (not a or a < abs(c)) and -(c * 2 ^ (10 * t) * sin((t * d - p * .25) * _2pi / p)) + b or -(a * 2 ^ (10 * t) * sin((t * d - p / _2pi * asin(c/a)) * _2pi / p)) + b
+	return t == -1 and b or t == 0 and b + c or (not a or a < abs(c)) and -(c * 2 ^ (10 * t) * sin((t * d - p / 4) * _2pi / p)) + b or -(a * 2 ^ (10 * t) * sin((t * d - p / _2pi * asin(c/a)) * _2pi / p)) + b
 end
 
 local function OutElastic(t, b, c, d, a, p)
 	t = t / d
 	p = p or d * 0.3
-	return t == 0 and b or t == 1 and b + c or (not a or a < abs(c)) and c * 2 ^ (-10 * t) * sin((t * d - p * .25) * _2pi / p) + c + b or a * 2 ^ (-10 * t) * sin((t * d - p / _2pi * asin(c / a)) * _2pi / p) + c + b
+	return t == 0 and b or t == 1 and b + c or (not a or a < abs(c)) and c * 2 ^ (-10 * t) * sin((t * d - p / 4) * _2pi / p) + c + b or a * 2 ^ (-10 * t) * sin((t * d - p / _2pi * asin(c / a)) * _2pi / p) + c + b
 end
 
 local function InOutElastic(t, b, c, d, a, p)
@@ -363,23 +363,23 @@ local function InOutElastic(t, b, c, d, a, p)
 
 	if not a or a < abs(c) then
 		a = c
-		s = p * .25
+		s = p / 4
 	else
 		s = p / _2pi * asin(c / a)
 	end
 
 	if t < 1 then
-		return -0.5 * a * 2 ^ (10 * t) * sin((t * d - s) * _2pi / p) + b
+		return -a / 2 * 2 ^ (10 * t) * sin((t * d - s) * _2pi / p) + b
 	else
-		return a * 2 ^ (-10 * t) * sin((t * d - s) * _2pi / p ) * 0.5 + c + b
+		return a * 2 ^ (-10 * t) * sin((t * d - s) * _2pi / p) / 2 + c + b
 	end
 end
 
 local function OutInElastic(t, b, c, d, a, p)
-	if t < d * 0.5 then
-		return OutElastic(t * 2, b, c * 0.5, d, a, p)
+	if t < d / 2 then
+		return OutElastic(t * 2, b, c / 2, d, a, p)
 	else
-		return InElastic(t * 2 - d, b + c * 0.5, c * 0.5, d, a, p)
+		return InElastic(t * 2 - d, b + c / 2, c / 2, d, a, p)
 	end
 end
 
@@ -399,17 +399,17 @@ local function InOutBack(t, b, c, d, s)
 	s = (s or 1.70158) * 1.525
 	t = t / d * 2
 	if t < 1 then
-		return c * 0.5 * (t * t * ((s + 1) * t - s)) + b
+		return c / 2 * (t * t * ((s + 1) * t - s)) + b
 	else
 		t = t - 2
-		return c * 0.5 * (t * t * ((s + 1) * t + s) + 2) + b
+		return c / 2 * (t * t * ((s + 1) * t + s) + 2) + b
 	end
 end
 
 local function OutInBack(t, b, c, d, s)
-	c = c * 0.5
+	c = c / 2
 	s = s or 1.70158
-	if t < d * 0.5 then
+	if t < d / 2 then
 		t = (t * 2) / d - 1
 		return c * (t * t * ((s + 1) * t + s) + 1) + b
 	else
@@ -439,18 +439,18 @@ local function InBounce(t, b, c, d)
 end
 
 local function InOutBounce(t, b, c, d)
-	if t < d * 0.5 then
-		return InBounce(t * 2, 0, c, d) * 0.5 + b
+	if t < d / 2 then
+		return InBounce(t * 2, 0, c, d) / 2 + b
 	else
-		return OutBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b
+		return OutBounce(t * 2 - d, 0, c, d) / 2 + c / 2 + b
 	end
 end
 
 local function OutInBounce(t, b, c, d)
-	if t < d * 0.5 then
-		return OutBounce(t * 2, b, c * 0.5, d)
+	if t < d / 2 then
+		return OutBounce(t * 2, b, c / 2, d)
 	else
-		return InBounce(t * 2 - d, b + c * 0.5, c * 0.5, d)
+		return InBounce(t * 2 - d, b + c / 2, c / 2, d)
 	end
 end
 

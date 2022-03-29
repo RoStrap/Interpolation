@@ -1,6 +1,7 @@
 -- Smooth Interpolation Curve Generator
 -- @author Validark
 -- @original https://github.com/gre/bezier-easing
+-- 		Copyright (c) 2014 Gaëtan Renaudeau, MIT License
 -- @testsite http://cubic-bezier.com/
 -- @testsite http://greweb.me/bezier-easing-editor/example/
 

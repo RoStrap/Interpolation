@@ -54,11 +54,8 @@ function Bezier.new(x1, y1, x2, y2)
 	end
 
 	return function(t, b, c, d)
-		if b == nil then b = 0 end
-		if c == nil then c = 1 end
-		if d == nil then d = 1 else t = t / d end
-		if t <= 0 then return b end -- Make sure the endpoints are correct
-		if t >= 1 then return b + c end
+		if d ~= nil then t = t / d end
+		t = math.clamp(t, 0, 1) -- Make sure the endpoints are correct
 
 		local CurrentSample = K_SPLINE_TABLE_SIZE - 2
 
@@ -99,7 +96,7 @@ function Bezier.new(x1, y1, x2, y2)
 		end
 
 		t = ((l*GuessForT + m)*GuessForT + k)*GuessForT
-		return c*t + b
+		return (c or 1)*t + (b or 0)
 	end
 end
 
